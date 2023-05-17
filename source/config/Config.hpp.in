@@ -1,0 +1,9 @@
+#pragma once
+
+// Add configuration variables in Config.hpp.in! Header will be overwritten by cmake!
+#cmakedefine PROJECT_NAME "@PROJECT_NAME@"
+#cmakedefine VERSION "@VERSION@"
+#cmakedefine VERSION_NAME "@VERSION_NAME@"
+#define DEBUG @DEBUG_BUILD@
+#define LOGGING @LOGGING@
+#define OS_NAME "@OS_NAME@"

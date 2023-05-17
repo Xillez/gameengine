@@ -1,0 +1,8 @@
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@/bin/doc/
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/source @CMAKE_CURRENT_SOURCE_DIR@/docs
+SEARCHENGINE           = YES
+GENERATE_LATEX         = NO
+RECURSIVE              = YES
+HAVE_DOT               = YES
+CALL_GRAPH             = YES
+UML_LOOK               = YES
