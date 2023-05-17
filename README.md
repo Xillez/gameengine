@@ -16,10 +16,10 @@ Basic game engine.
 
 ### Installation / Usage (Linux only so far)
 
-1. Run the build script:
+1. Run the build script (linux):
 
 ```
-./bin/ecs
+./buildlinux.sh
 ```
 
 2. Go into the "build" folder.
