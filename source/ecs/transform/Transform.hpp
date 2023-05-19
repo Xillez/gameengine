@@ -1,5 +1,5 @@
-#include "../../entity/Entity.hpp"
-#include "../component/Component.hpp"
+#include "../Entity.hpp"
+#include "../Component.hpp"
 
 class Transform : public Component
 {
