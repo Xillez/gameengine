@@ -1,10 +1,13 @@
 #include "../Entity.hpp"
 #include "../Component.hpp"
 
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 class Transform : public Component
 {
 private:
-    //Vector3 position;
-    //Quat rotation;
-    //Vector3 scale;
+    glm::vec3 position;
+    glm::quat rotation;
+    glm::vec3 scale;
 };
