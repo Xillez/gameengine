@@ -3,18 +3,18 @@
 #include <iostream>
 #include <algorithm>
 
-ECS::Entity::Entity() : ID(DEFAULT_ENTITY_ID)
+Entity::Entity() : ID(DEFAULT_ENTITY_ID)
 {
 	//
 }
 
-ECS::Entity::Entity(ECS::EntityID id) : ID(id)
+Entity::Entity(EntityID id) : ID(id)
 {
 	//
 }
 
 //virtual
-ECS::Entity::~Entity()
+Entity::~Entity()
 {
 	//
 }
@@ -24,36 +24,36 @@ ECS::Entity::~Entity()
 // ##########################################
 
 //virtual
-void ECS::Entity::Start()
+void Entity::Start()
 {
-	for (std::pair<const ECS::ComponentID, ECS::Component*>& comp : this->components)
+	for (std::pair<const ComponentID, Component*>& comp : this->components)
 		comp.second->Start();
 }
 
 //virtual
-void ECS::Entity::Update()
+void Entity::Update()
 {
-	for (std::pair<const ECS::ComponentID, ECS::Component*>& comp : this->components)
+	for (std::pair<const ComponentID, Component*>& comp : this->components)
 		comp.second->Update();
 }
 
 //virtual
-/*void ECS::Entity::PhysicsUpdate()
+/*void Entity::PhysicsUpdate()
 {
 	//
 }*/
 
 //virtual
-void ECS::Entity::Draw()
+void Entity::Draw()
 {
-	for (std::pair<const ECS::ComponentID, ECS::Component*>& comp : this->components)
+	for (std::pair<const ComponentID, Component*>& comp : this->components)
 		comp.second->Draw();
 }
 
 //virtual
-bool ECS::Entity::Destroy()
+bool Entity::Destroy()
 {
-	for (std::pair<const ECS::ComponentID, ECS::Component*>& comp : this->components)
+	for (std::pair<const ComponentID, Component*>& comp : this->components)
 	{
 		comp.second->Destroy();
 		delete this->components[comp.first];
@@ -71,14 +71,14 @@ bool ECS::Entity::Destroy()
 // ##########################################
 
 //virtual
-ECS::Component* ECS::Entity::GetComponentByID(ECS::ComponentID id)
+Component* Entity::GetComponentByID(ComponentID id)
 {
 	/*auto it = std::find(this->componentIDs.begin(), this->componentIDs.end(), id);    // Does the id exist.
     if (it != this->componentIDs.end())            // Found component, delete it.
     {
         // Add parent / initialize with current object as parent.
 		//component->Initialize(this);
-		// Add it to current ECS::Entity's component list.
+		// Add it to current Entity's component list.
 		this->componentIDs.push_back(id);
     }
 
@@ -90,13 +90,13 @@ ECS::Component* ECS::Entity::GetComponentByID(ECS::ComponentID id)
 // ########## Utility functions ##########
 // ##########################################
 
-int ECS::Entity::GetID()
+int Entity::GetID()
 {
 	return this->ID;
 }
 
 //virtual
-std::string ECS::Entity::GetClassName(bool removeDigits)
+std::string Entity::GetClassName(bool removeDigits)
 {
 	std::string name = typeid(*this).name();	// Get dirty class name.
 	if (typeid(*this).__is_pointer_p())			// If it's a pointer remove prefix "P".
@@ -111,7 +111,7 @@ std::string ECS::Entity::GetClassName(bool removeDigits)
 }
 
 //virtual
-/*std::string ECS::Entity::GetLowestTypeName(bool removeDigits)
+/*std::string Entity::GetLowestTypeName(bool removeDigits)
 {
 	std::string name = typeid(*this).name();				// Get the dirty name of class.
 	//printf("GET LOWEST TYPE NAME: %s\n", name.c_str());
@@ -126,7 +126,7 @@ std::string ECS::Entity::GetClassName(bool removeDigits)
 	return name;											// Return pretty name.
 }*/
 
-ECS::ComponentID ECS::Entity::NextCompID()
+ComponentID Entity::NextCompID()
 {
     return this->nextCompId++;
 }

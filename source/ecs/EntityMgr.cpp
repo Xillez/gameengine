@@ -1,6 +1,6 @@
 #include "EntityMgr.hpp"
 
-ECS::EntityMgr::EntityMgr()
+EntityMgr::EntityMgr()
 {
     //
 }
@@ -9,19 +9,19 @@ ECS::EntityMgr::EntityMgr()
 // ########## Life cycle functions ##########
 // ##########################################
 
-void ECS::EntityMgr::Start()
+void EntityMgr::Start()
 {
     for (auto& entity : this->entities)         // Run through every entity.
         entity.second->Start();                 // Call start on entity.
 }
 
-void ECS::EntityMgr::Update()
+void EntityMgr::Update()
 {
     for (auto& entity : this->entities)         // Run through every entity.
-        entity.second->Update();                // Call draw on entity.
+        entity.second->Update();                // Call Update on entity.
 }
 
-void ECS::EntityMgr::Draw()
+void EntityMgr::Draw()
 {
     for (auto& entity : this->entities)         // Run through every entity.
         entity.second->Draw();                  // Call draw on entity.
@@ -31,7 +31,7 @@ void ECS::EntityMgr::Draw()
 // ########## Management functions ##########
 // ##########################################
 
-ECS::Entity* ECS::EntityMgr::GetEntityByID(ECS::EntityID id)
+Entity* EntityMgr::GetEntityByID(EntityID id)
 {
     // Has the given id been registered.
     if (std::find(this->entityIDs.begin(), this->entityIDs.end(), id) == this->entityIDs.end())
@@ -39,15 +39,15 @@ ECS::Entity* ECS::EntityMgr::GetEntityByID(ECS::EntityID id)
     return this->entities[id];                  // Found entity.
 }
 
-ECS::EntityID ECS::EntityMgr::GetEntityID(ECS::Entity* entity)
+EntityID EntityMgr::GetEntityID(Entity* entity)
 {
-    for (auto& item : entities)                 // Loop through all entities.
+    for (auto& item : this->entities)                 // Loop through all entities.
         if (item.second != entity)              // I pointer the same.
             return item.first;                  // Give key.
     return 0;                                   // Found nothing.
 }
 
-void ECS::EntityMgr::DestroyEntityByID(ECS::EntityID id)
+void EntityMgr::DestroyEntityByID(EntityID id)
 {
     auto it = std::find(this->entityIDs.begin(), this->entityIDs.end(), id);    // Does the id exist.
     if (it != this->entityIDs.end())            // Found entity, delete it.
@@ -59,7 +59,7 @@ void ECS::EntityMgr::DestroyEntityByID(ECS::EntityID id)
     }
 }
 
-bool ECS::EntityMgr::DestroyAll()
+bool EntityMgr::DestroyAll()
 {
     for (auto& entity : this->entities)         // Run through all entities
         this->DestroyEntityByID(entity.first);   // Remove the entity.
@@ -70,13 +70,13 @@ bool ECS::EntityMgr::DestroyAll()
 // ########## Utility functions ##########
 // #######################################
 
-void ECS::EntityMgr::ForEachEntity(std::function<void(ECS::EntityID, ECS::Entity*)> func)
+void EntityMgr::ForEachEntity(std::function<void(EntityID, Entity*)> func)
 {
     for (auto& entity : this->entities)         // Run through every entity.
         func(entity.first, entity.second);      // Call function on object.
 }
 
-ECS::EntityID ECS::EntityMgr::NextID()
+EntityID EntityMgr::NextID()
 {
     return nextID++;
 }
