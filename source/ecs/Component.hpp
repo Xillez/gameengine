@@ -5,6 +5,8 @@
 #include <typeinfo>
 #include <string>
 
+class Entity;
+
 /**
  * @brief Base class for components. To make component, make new class extendng from this one. 
  */
@@ -12,18 +14,9 @@ class Component
 {
 public:
 	/**
-	 * @brief Constructor of Component.
-	 * 
-	 * @param id - Id of new component.
+	 * @brief Constructs a new empty component.
 	 */
-	Component(ComponentID id);
-
-	/**
-	 * @brief initialize function to give component parent object for updating and possibly drawing.
-	 *  
-	 * @param parent - Parent object I exist inside.
-	 */
-	virtual void Initialize(const EntityID& parent);
+	Component();
 
 	// ##########################################
 	// ########## Life cycle functions ##########
@@ -45,14 +38,9 @@ public:
 	//virtual void PhysicsUpdate();
 
 	/**
-	 * @brief Draw - Draw the mesh on the screen.
-	 */
-	virtual void Draw();
-
-	/**
 	 * @brief Destory - Make ready for removal. 
 	 */
-	virtual bool Destroy();
+	virtual void Destroy();
 
 	// ##########################################
 	// ########## Management functions ##########
@@ -61,43 +49,36 @@ public:
 	/**
 	 * @brief Get the Component id.
 	 * 
-	 * @return ComponentID - The id of the component.
+	 * @return std::string - The id of the component.
 	 */
-	ComponentID GetID();
+	std::string GetID();
 
 	/**
-	 * @brief Get the entity parent ID
+	 * @brief Get the entity parent.
 	 * 
-	 * @return EntityID 
+	 * @return Entity* - Parent entity. 
 	 */
-	EntityID GetParentID();
+	Entity* GetParent();
 
 	/**
-	 * @brief Set the Parent ID
+	 * @brief Sets parent entity.
 	 * 
-	 * @param parent - EntityID (int) - id of parent entity.
+	 * @param parent - Entity* - Parent entity.
 	 */
-	void SetParentID(EntityID parent);
-
-	// #######################################
-	// ########## Utility functions ##########
-	// #######################################
+	void SetParent(Entity* parent);
 
 	/**
-	 * @brief Get the name of the current class.
+	 * @brief Whether the component has been started or not.
 	 * 
-	 * @return std::string - Name of the current class.
+	 * @return true - Component has been stated.
+	 * @return false - Component hasn't been stated yet.
 	 */
-	virtual std::string GetClassName(bool removeDigit = true);
+	bool HasStarted();
 
-	/**
-	 * @brief Get the name of the lowest class in the hierarchy.
-	 * 
-	 * @return std::string - Name of the lowest class in the hierarchy.
-	 */
-	//virtual std::string GetLowestTypeName(bool removeDigit = true);
-	
 private: 
-	const ComponentID ID;			//!< Component's id.
-	EntityID parentID;		//!< Parent id exists inside.
+	std::string id;
+
+	Entity* parent;
+
+	bool started;
 };

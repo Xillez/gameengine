@@ -1,5 +1,9 @@
 #include "./Utils.hpp"
 
+#include <chrono>
+#include <random>
+#include <uuid/uuid.h>
+
 std::string generate_random_string()
 {
     static const char alphanum[] =
@@ -20,4 +24,15 @@ std::string generate_random_string()
     }
 
     return result;
+}
+
+std::string uuid()
+{
+    uuid_t uuid;
+    char uuid_str[37];
+
+    uuid_generate_random(uuid);
+    uuid_unparse_lower(uuid, uuid_str);
+
+    return std::string(uuid_str);
 }

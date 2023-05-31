@@ -31,7 +31,7 @@ class Reflection
     }
 
     template<typename Tclass, typename Tbase>
-    bool isBaseOf()
+    static bool IsExtending()
     {
         bool valid = std::is_base_of<Tbase, Tclass>::value;
 
@@ -44,3 +44,4 @@ class Reflection
 
 #define REFLECT_OBJECT(obj) Reflection::GetTypeName(obj)
 #define REFLECT_TYPE(T) Reflection::GetTypeName<T>()
+#define REFLECT_IS_EXTENDING(Tclass, Tbase) Reflection::IsExtending<Tclass, Tbase>()

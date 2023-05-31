@@ -1,13 +1,16 @@
 #include "./Component.hpp"
+#include "Component.hpp"
 
-Component::Component(ComponentID id) : ID(id)
-{
-	//
-}
+// REMEMBER: Forward declared in hpp file!
+#include "./Entity.hpp"
 
-void Component::Initialize(const EntityID& parent)
+#include "../utils/Utils.hpp"
+
+Component::Component()
 {
-	this->parentID = parent;
+	this->id = uuid();
+	this->started = false;
+	this->parent = nullptr;
 }
 
 // ##########################################
@@ -17,6 +20,7 @@ void Component::Initialize(const EntityID& parent)
 //virtual
 void Component::Start()
 {
+	this->started = true;
 	printf("Component - Start()\n");
 }
 
@@ -33,13 +37,7 @@ void Component::Update()
 }*/
 
 //virtual
-void Component::Draw()
-{
-	printf("Component - Draw()\n");
-}
-
-//virtual
-bool Component::Destroy()
+void Component::Destroy()
 {
 	printf("Component - Destroy()\n");
 }
@@ -48,52 +46,22 @@ bool Component::Destroy()
 // ########## Management functions ##########
 // ##########################################
 
-ComponentID Component::GetID()
+std::string Component::GetID()
 {
-    return this->ID;
+    return this->id;
 }
 
-EntityID Component::GetParentID()
+Entity* Component::GetParent()
 {
-    return this->parentID;
+    return this->parent;
 }
 
-void Component::SetParentID(EntityID parent)
+void Component::SetParent(Entity* parent)
 {
-    this->parentID = parent;
+    this->parent = parent;
 }
 
-// #######################################
-// ########## Utility functions ##########
-// #######################################
-
-//virtual
-std::string Component::GetClassName(bool removeDigits)
+bool Component::HasStarted()
 {
-	std::string name = typeid(*this).name();	// Get dirty class name.
-	if (typeid(*this).__is_pointer_p())			// If it's a pointer remove prefix "P".
-		name.erase(name.begin(), name.begin() + 1);
-	if (removeDigits)							// Should remove digits?
-	{
-		int i = 0;
-		while (isdigit(name.at(i))) i++;		// Find where digits end.
-		name.erase(name.begin(), name.begin() + i);	// Remove digits.
-	}
-	return name;								// Return pretty name.
+    return this->started;
 }
-
-//virtual
-/*std::string Component::GetLowestTypeName(bool removeDigits)
-{
-	std::string name = typeid(*this).name();		// Get the dirty name of class.
-    printf("GET LOWEST TYPE NAME: %s\n", name);
-	if (typeid(*this).__is_pointer_p())				// If it's a pointer remove prefix "P".
-		name.erase(name.begin(), name.begin() + 1);
-	if (removeDigits)								// Should remove digits?
-	{
-		int i = 0;
-		while (isdigit(name.at(i))) i++;					// Find where digits end.
-		name.erase(name.begin(), name.begin() + i);			// Remove them.
-	}
-	return name;									// Return pretty name.
-}*/

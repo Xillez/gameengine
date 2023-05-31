@@ -12,8 +12,6 @@
 #include <algorithm>
 #include <type_traits>
 
-#define DEFAULT_ENTITY_ID -1
-
 /* TODO:
     - Implement PhysicsUpdate for physx compatibility.
  */
@@ -21,21 +19,13 @@
 /**
  * @brief Generic Entity with components.
  */
-class Entity// : BaseEntity
+class Entity
 {
 public:
     /**
      * @brief Basic Entity constructur, Default Entity ID.
-     * !!Note!! Ment to be a temporary instantiation! Make sure you use Instantiate() to get legal id.
      */
     Entity();
-
-    /**
-     * @brief Entity constructor. Should NOT be used for new entity generation except for EntityMgr.
-     * 
-     * @param id - Id of new entity.
-     */
-    Entity(EntityID id);
 
     /**
      * @brief Entity deconstructor.
@@ -59,12 +49,7 @@ public:
     /**
      * @brief Physics update function for Entities.
      */
-    //virtual void PhysicsUpdate();    
-
-    /**
-     * @brief Draw the entity and possible subcomponents.
-     */
-    virtual void Draw();
+    //virtual void PhysicsUpdate();
 
     /**
      * @brief Used for destroying an entity.
@@ -72,7 +57,7 @@ public:
      * @return true - Entity was destroyed.
      * @return false - Failed to destroy.
      */
-    virtual bool Destroy();
+    virtual void Destroy();
 
     // ##########################################
     // ########## Management functions ##########
@@ -83,7 +68,7 @@ public:
      * 
      * @tparam Class - The subclass of Component.
      * 
-    @return ComponentID - The ID to the newly created component.
+    @return std::string - The ID to the newly created component.
     */
     template<class Tclass>
     Tclass* CreateComponent()
@@ -91,17 +76,30 @@ public:
         if (!std::is_base_of<Component, Tclass>::value)   // Class does NOT extend Component
         {
             std::cout << "CreateComponent() accepts only classes derived from Component";
-            return 0;
+            return nullptr;
         }
 
-        ComponentID tempID = this->NextCompID();    // Get id and increase.
-        Tclass* temp = new Tclass(tempID);            // Make new component.
-        temp->SetParentID(this->GetID());            // Set Parent id in component to mine.
-        this->componentIDs.push_back(tempID);       // Add id.
-        this->components[tempID] = temp;            // Save component pointer.
-        return temp;
-        
-        return 0;
+        Tclass* component = new Tclass();
+        component->SetParent(this);
+        this->components.push_back(component);
+        return component;
+    }
+
+    /**
+     * @brief Add a pre-defined component.
+     * 
+     * @param component Component - Some component
+     */
+    template<class Tclass>
+    void AddComponent(Tclass& component)
+    {
+        if (!std::is_base_of<Component, Tclass>::value)   // Class does NOT extend Component
+        {
+            std::cout << "AddComponent() accepts only classes derived from Component";
+        }
+
+        component.SetParent(this);
+        this->components.push_back(&component);
     }
 
     /**
@@ -120,10 +118,10 @@ public:
             std::cout << "GetComponent() accepts only Component class and subclasses of it!\n";
             return nullptr;
         }
-        auto findByType = [](std::pair<ComponentID, Component*> entry){ return (typeid(Tclass) == typeid(entry.second)); };
-        auto it = std::find_if(this->components.begin(), this->components.end(), findByType);
-        if (it != this->components.end());
-            printf("%s was similar to %s: %d", typeid(Tclass).name(), this->components[it].second->GetLowestTypeName(), (it != this->components.end()));
+        auto findByType = [](std::pair<std::string, Component*> entry){ return (typeid(Tclass) == typeid(entry.second)); };
+        auto itr = std::find_if(this->components.begin(), this->components.end(), findByType);
+        if (itr != this->components.end());
+            return *itr;
     }
 
     /**
@@ -142,9 +140,10 @@ public:
             return nullptr;
         }
         std::vector<Component*> comps;
-        for (std::pair<ComponentID, Component*>& comp : this->components)
-            if (typeid(comp.second) == typeid(Tclass))
-                comps.push_back(comp.second);
+        for (Component* comp : this->components)
+            if (typeid(comp) == typeid(Tclass))
+                comps.push_back(comp);
+        return comps;
     }
 
     /**
@@ -154,7 +153,7 @@ public:
      * 
      * @return Component* - Pointer to component found. If nothing found, nullptr returned.
      */
-    virtual Component* GetComponentByID(ComponentID id);
+    virtual Component* GetComponentByID(std::string id);
 
     /**
      * @brief Removes an component by ID, all components without an owner gets removed aswell.
@@ -168,7 +167,46 @@ public:
      * 
      * @param id - ID of component to be removed.
      */
-    void RemoveComponentByID(ComponentID id);
+    void RemoveComponentByID(std::string id);
+
+    /**
+     * @brief Get child entity by ID.
+     * 
+     * @param id - Id of wanted entity.
+     * 
+     * @return Entity* - Pointer to entity found. If nothing found, nullptr returned.
+     */
+    Entity* GetChildByID(std::string id);
+
+    /**
+     * @brief Get children.
+     * 
+     * @return std::vector<Entity*>& - List of all children.
+     */
+    std::vector<Entity*>& GetChildren();
+
+    /**
+     * @brief Get chile entity by ID.
+     * 
+     * @param id - Id of wanted entity.
+     * 
+     * @return Entity* - Pointer to entity found. If nothing found, nullptr returned.
+     */
+    void Add(Entity* entity);
+
+    /**
+     * @brief Removed the given entity from the 
+     * 
+     * @param entity Entity* - Entity to be removed.
+     */
+    void Remove(Entity* entity);
+
+    /**
+     * @brief Set the parent entity.
+     * 
+     * @param entity Entity* - parent entity.
+     */
+    void SetParent(Entity* entity);
 
     // #######################################
     // ########## Utility functions ##########
@@ -179,42 +217,24 @@ public:
      * 
      * @return id - id for entity.
      */
-    virtual int GetID();
+    virtual std::string GetID();
 
     /**
-     * @brief Get the name of the current class.
+     * @brief Returns state telling wether this entity is started or not.
      * 
-     * @return std::string - Name of the current class.
+     * @return true - Entity has been started.
+     * @return false - Entity has only been initialized.
      */
-    virtual std::string GetClassName(bool removeDigit = true);
-
-    /**
-     * @brief Get the name of the lowest class in the hierarchy.
-     * 
-     * @return std::string - Name of the lowest class in the hierarchy.
-     */
-    //virtual std::string GetLowestTypeName(bool removeDigit = true);
+    bool HasStarted();
 
 protected:
-    std::vector<ComponentID> componentIDs;    //!< List of Component IDs.    
+    std::string id;                        //!< Id of Entity.
 
-    //int nextID = INPUT_COMPONENT_ID + 1;
+    std::vector<Component*> components;     //!< A unordered map, mapping components to ids.
 
+    std::vector<Entity*> children;      //!< A vector of all children registered.
 
-    //std::vector<ComponentID> componentIDs;      //!< A vector of all components registered.
-    std::unordered_map<ComponentID, Component*> components;     //!< A unordered map, mapping components to ids.
+    Entity* parent;
 
-private:
-    /**
-     * @brief Function for increasing next entity id. DO NOT USE.
-     * 
-     * @return EntityID (int) - ID of next entity to be added.
-     */
-    EntityID NextCompID();
-
-    EntityID ID;                        //!< Id of Entity.
-
-    ComponentID nextCompId = 0;            //!< Next Id of components.
-
-    void* mgr;                            //!< Pointer back to EntityMgr.
+    bool started;
 };

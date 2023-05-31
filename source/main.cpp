@@ -1,5 +1,7 @@
 #include "./utils/List.hpp"
-#include "./ecs/EntityMgr.hpp"
+#include "./ecs/Scene.hpp"
+#include "./ecs/Entity.hpp"
+#include "./ecs/Component.hpp"
 #include "./config/Config.hpp"
 #include "./utils/Logging.hpp"
 
@@ -10,19 +12,10 @@
 #include <GLFW/glfw3.h>
 #include <SDL2/SDL.h>
 
-class TestEntity : public Entity
-{
-public:
-	TestEntity(EntityID id) : Entity(id)
-	{
-		//
-	};
-};
-
 class TestComponent : public Component
 {
 public:
-	TestComponent(ComponentID id) : Component(id)
+	TestComponent() : Component()
 	{
 		//
 	};
@@ -31,7 +24,7 @@ public:
 class TestComponent2 : public Component
 {
 public:
-	TestComponent2(ComponentID id) : Component(id)
+	TestComponent2() : Component()
 	{
 		//
 	};
@@ -100,33 +93,20 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-	EntityMgr entityMgr;
+	Scene scene;
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		Entity* entity = entityMgr.GetEntityByID(entityMgr.CreateEntity<TestEntity>());
+		Entity* entity = new Entity();
 		entity->CreateComponent<TestComponent>();
-		entity->CreateComponent<TestComponent>();
-		entity->CreateComponent<TestComponent>();
-		entity->CreateComponent<TestComponent2>();
-		entity->CreateComponent<TestComponent2>();
+		scene.Add(entity);
 	}
 
-	entityMgr.Start();
+	scene.Start();
 
 	// Game/render loop
     while (!glfwWindowShouldClose(window)) {
-		entityMgr.Update();
-
-		/*EntityMgr.ForEachEntity([](EntityID id, Entity* entity){
-			TestComponent* comp = entity->CreateComponent<TestComponent>();
-			TestComponent2* comp2 = entity->CreateComponent<TestComponent2>();
-			
-			printf("Component id: %d | EntityParent id: %d | Component class type: %s\n", comp->GetID(), comp->GetParentID(), comp->GetClassName().c_str());
-			printf("Component id: %d | EntityParent id: %d | Component class type: %s\n", comp2->GetID(), comp2->GetParentID(), comp2->GetClassName().c_str());
-		});*/
-
-		entityMgr.Draw();
+		scene.Update();
 
         // Clear the screen to black
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -140,7 +120,7 @@ int main(int argc, char const *argv[])
     }
 
 	// Clean up
-	entityMgr.DestroyAll();
+	scene.Destroy();
     glfwDestroyWindow(window);
     glfwTerminate();
     SDL_Quit();

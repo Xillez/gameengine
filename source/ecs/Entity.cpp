@@ -1,16 +1,15 @@
 #include "Entity.hpp"
 
+#include "../utils/Utils.hpp"
+
 #include <iostream>
 #include <algorithm>
 
-Entity::Entity() : ID(DEFAULT_ENTITY_ID)
+Entity::Entity()
 {
-	//
-}
-
-Entity::Entity(EntityID id) : ID(id)
-{
-	//
+	this->id = uuid();
+	this->started = false;
+	this->parent = nullptr;
 }
 
 //virtual
@@ -26,15 +25,25 @@ Entity::~Entity()
 //virtual
 void Entity::Start()
 {
-	for (std::pair<const ComponentID, Component*>& comp : this->components)
-		comp.second->Start();
+	printf("Entity - Start()\n");
+	for (Component*& comp : this->components)
+		if (!comp->HasStarted())
+			comp->Start();
+
+	this->started = true;
 }
 
 //virtual
 void Entity::Update()
 {
-	for (std::pair<const ComponentID, Component*>& comp : this->components)
-		comp.second->Update();
+	for (Component*& comp : this->components)
+	{
+		// Component hasn't been started yet, starting before we update it.
+		if (!comp->HasStarted())
+			comp->Start();
+
+		comp->Update();
+	}
 }
 
 //virtual
@@ -44,26 +53,12 @@ void Entity::Update()
 }*/
 
 //virtual
-void Entity::Draw()
+void Entity::Destroy()
 {
-	for (std::pair<const ComponentID, Component*>& comp : this->components)
-		comp.second->Draw();
-}
+	for (Component*& comp : this->components)
+		comp->Destroy();
 
-//virtual
-bool Entity::Destroy()
-{
-	for (std::pair<const ComponentID, Component*>& comp : this->components)
-	{
-		comp.second->Destroy();
-		delete this->components[comp.first];
-		this->components[comp.first] = nullptr;
-	}
-
-	this->componentIDs.clear();
 	this->components.clear();
-
-    return (this->componentIDs.size() == 0);
 }
 
 // ##########################################
@@ -71,62 +66,75 @@ bool Entity::Destroy()
 // ##########################################
 
 //virtual
-Component* Entity::GetComponentByID(ComponentID id)
+Component* Entity::GetComponentByID(std::string id)
 {
-	/*auto it = std::find(this->componentIDs.begin(), this->componentIDs.end(), id);    // Does the id exist.
-    if (it != this->componentIDs.end())            // Found component, delete it.
+	/*auto it = std::find(this->std::strings.begin(), this->std::strings.end(), id);    // Does the id exist.
+    if (it != this->std::strings.end())            // Found component, delete it.
     {
         // Add parent / initialize with current object as parent.
 		//component->Initialize(this);
 		// Add it to current Entity's component list.
-		this->componentIDs.push_back(id);
+		this->std::strings.push_back(id);
     }
 
 	// Tell whether it was added or not.
 	return (id);*/
+	return nullptr;
+}
+
+Entity* Entity::GetChildByID(std::string id)
+{
+    auto itr = std::find_if(
+        this->children.begin(),
+        this->children.end(),
+        [id](Entity* e){ return e->GetID() == id; }
+    );
+
+    // Found entity.
+    if (itr != this->children.end())
+        return *itr;
+
+    // Found nothing.
+    return nullptr;
+}
+
+std::vector<Entity*>& Entity::GetChildren()
+{
+    return this->children;
+}
+
+void Entity::Add(Entity* entity)
+{
+	entity->SetParent(this);
+	this->children.push_back(entity);
+}
+
+void Entity::Remove(Entity* entity)
+{
+	this->children.erase(
+		std::remove(this->children.begin(), this->children.end(), entity),
+		this->children.end()
+	);
+}
+
+void Entity::SetParent(Entity* parent)
+{
+	if (this->parent)
+		this->parent->Remove(this);
+
+	this->parent = parent;
 }
 
 // ##########################################
 // ########## Utility functions ##########
 // ##########################################
 
-int Entity::GetID()
+std::string Entity::GetID()
 {
-	return this->ID;
+	return this->id;
 }
 
-//virtual
-std::string Entity::GetClassName(bool removeDigits)
+bool Entity::HasStarted()
 {
-	std::string name = typeid(*this).name();	// Get dirty class name.
-	if (typeid(*this).__is_pointer_p())			// If it's a pointer remove prefix "P".
-		name.erase(name.begin(), name.begin() + 1);
-	if (removeDigits)							// Should remove digits?
-	{
-		int i = 0;
-		while (isdigit(name.at(i))) i++;		// Find where digits end.
-		name.erase(name.begin(), name.begin() + i);	// Remove digits.
-	}
-	return name;								// Return pretty name.
-}
-
-//virtual
-/*std::string Entity::GetLowestTypeName(bool removeDigits)
-{
-	std::string name = typeid(*this).name();				// Get the dirty name of class.
-	//printf("GET LOWEST TYPE NAME: %s\n", name.c_str());
-	if (typeid(*this).__is_pointer_p())						// If it's a pointer remove prefix "P".
-		name.erase(name.begin(), name.begin() + 1);
-	if (removeDigits)										// Should remove digits?
-	{
-		int i = 0;
-		while (isdigit(name.at(i))) i++;					// Find where digits end.
-		name.erase(name.begin(), name.begin() + i);			// Remove them.
-	}
-	return name;											// Return pretty name.
-}*/
-
-ComponentID Entity::NextCompID()
-{
-    return this->nextCompId++;
+    return this->started;
 }
