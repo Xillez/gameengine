@@ -115,7 +115,7 @@ endforeach()
 # Give files for building application
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${SOURCE_DIR}/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} glfw ${GLM_LIBRARIES} ${SDL2_LIBRARIES} assimp fmt::fmt)
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} glfw ${GLM_LIBRARIES} ${SDL2_LIBRARIES} assimp fmt::fmt ${UUID_LIBRARY})
 
 # Include doxygen lists file
 include(${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLists.txt)
