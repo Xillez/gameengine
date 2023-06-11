@@ -2,6 +2,8 @@
 
 #include "../public/typedef.hpp"
 #include "./Component.hpp"
+#include "./transform/Transform.hpp"
+//#include "../event/EventHandler.hpp"
 
 #include <iostream>
 #include <stdio.h>
@@ -12,15 +14,13 @@
 #include <algorithm>
 #include <type_traits>
 
-/* TODO:
-    - Implement PhysicsUpdate for physx compatibility.
- */
-
 /**
  * @brief Generic Entity with components.
  */
-class Entity
+class Entity// : public EventHandler
 {
+    friend class Transform;
+
 public:
     /**
      * @brief Basic Entity constructur, Default Entity ID.
@@ -48,6 +48,7 @@ public:
 
     /**
      * @brief Physics update function for Entities.
+     * MIGHT BE IMPLEMENTED UNLESS NORMAL UPDATE IS GOOD ENOUGH.
      */
     //virtual void PhysicsUpdate();
 
@@ -58,6 +59,14 @@ public:
      * @return false - Failed to destroy.
      */
     virtual void Destroy();
+
+    /**
+     * @brief Returns state telling wether this entity has started or not.
+     * 
+     * @return true - Entity has been started.
+     * @return false - Entity has only been initialized.
+     */
+    bool HasStarted();
 
     // ##########################################
     // ########## Management functions ##########
@@ -208,33 +217,26 @@ public:
      */
     void SetParent(Entity* entity);
 
+    /**
+     * @brief Removes the entity from it's parent.
+     */
+    void RemoveFromParent();
+
     // #######################################
     // ########## Utility functions ##########
     // #######################################
     
     /**
-     * @brief A function for getting id.
-     * 
-     * @return id - id for entity.
+     * @brief Returns the id of the entity.
      */
     virtual std::string GetID();
 
-    /**
-     * @brief Returns state telling wether this entity is started or not.
-     * 
-     * @return true - Entity has been started.
-     * @return false - Entity has only been initialized.
-     */
-    bool HasStarted();
-
 protected:
-    std::string id;                        //!< Id of Entity.
+    std::string id;                         //!< Id of Entity.
 
-    std::vector<Component*> components;     //!< A unordered map, mapping components to ids.
+    std::vector<Component*> components;     //!< List of components.
 
-    std::vector<Entity*> children;      //!< A vector of all children registered.
-
-    Entity* parent;
+    Transform transform;
 
     bool started;
 };

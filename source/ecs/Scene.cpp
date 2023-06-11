@@ -12,9 +12,8 @@ Scene::Scene()
 
 void Scene::Start()
 {
-	printf("Scene - Start()\n");
     std::queue<Entity*> queue;
-    for (Entity*& entity : this->children)
+    for (Entity*& entity : this->GetChildren())
         queue.push(entity);
 
     while (!queue.empty())
@@ -32,7 +31,7 @@ void Scene::Start()
 void Scene::Update()
 {
     std::queue<Entity*> queue;
-    for (Entity* entity : this->children)
+    for (Entity* entity : this->GetChildren())
         queue.push(entity);
 
     while (!queue.empty())
@@ -49,7 +48,7 @@ void Scene::Update()
 void Scene::Destroy()
 {
     std::queue<Entity*> queue;
-    for (Entity* entity : this->children)
+    for (Entity* entity : this->GetChildren())
         queue.push(entity);
 
     while (!queue.empty())
@@ -57,8 +56,10 @@ void Scene::Destroy()
         Entity* entity = queue.front();
         queue.pop();
         entity->Destroy();
-        
+
         for (Entity*& child : entity->GetChildren())
             queue.push(child);
+
+        delete entity;
     }
 }

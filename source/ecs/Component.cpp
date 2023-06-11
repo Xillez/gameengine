@@ -21,13 +21,12 @@ Component::Component()
 void Component::Start()
 {
 	this->started = true;
-	printf("Component - Start()\n");
 }
 
 //virtual
 void Component::Update()
 {
-	printf("Component - Update()\n");
+	//
 }
 
 //virtual
@@ -39,7 +38,7 @@ void Component::Update()
 //virtual
 void Component::Destroy()
 {
-	printf("Component - Destroy()\n");
+	//
 }
 
 // ##########################################

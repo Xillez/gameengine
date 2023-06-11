@@ -95,11 +95,17 @@ int main(int argc, char const *argv[])
 
 	Scene scene;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		Entity* entity = new Entity();
 		entity->CreateComponent<TestComponent>();
 		scene.Add(entity);
+		for (int j = 0; j < 1; j++)
+		{
+			Entity* childEntity = new Entity();
+			childEntity->CreateComponent<TestComponent>();
+			entity->Add(childEntity);
+		}
 	}
 
 	scene.Start();
