@@ -12,8 +12,6 @@ bin/
 3dview/
 source/main2.cpp
 assets/
-imgui/*
-!imgui/README.md
 
 
 ### Intellij ###
