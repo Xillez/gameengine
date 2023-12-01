@@ -20,15 +20,14 @@ Basic game engine.
    1. Assimp
    2. UUID
    3. SDL2
-   4. GLFW3
-   5. GLM
-   6. Glew
-   7. Format
-   8. OpenGL
-   9. Doxygen
-   10. Dot
-   11. CMake
-   12. Make
+   4. GLM
+   5. Glew
+   6. Format
+   7. OpenGL
+   8. Doxygen
+   9. Dot
+   10. CMake
+   11. Make
 2. Run the build script (linux):
 
 ```

@@ -11,6 +11,10 @@ bin/
 /.metadata/
 3dview/
 source/main2.cpp
+assets/
+imgui/*
+!imgui/README.md
+
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm

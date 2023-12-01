@@ -15,7 +15,7 @@ elseif(WIN32)
 endif()
 
 # Set project name
-set(PROJECT_NAME "gameengine")
+set(PROJECT_NAME "SkyForgeEngine")
 set(VERSION "v0.1")
 set(VERSION_NAME "Sponge")
 
@@ -52,7 +52,6 @@ set(SOURCE_DIR ${PROJECT_PATH}/source)
 set(OpenGL_GL_PREFERENCE "LEGACY")
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 find_package(SDL2 REQUIRED)
 
@@ -64,6 +63,17 @@ set(CMAKE_MODULE_PATH ${PROJECT_PATH})
 find_package(ASSIMP REQUIRED)
 find_library(UUID_LIBRARY NAMES uuid)
 find_package(fmt REQUIRED)
+find_package(SOIL REQUIRED)
+# ----------------------------------- IMGUI ------------------------------------
+# Add the ImGui library
+set(IMGUI_DIR ${PROJECT_PATH}/imgui)
+file(GLOB IMGUI_SOURCES ${IMGUI_DIR}/*.cpp ${IMGUI_DIR}/*.h)
+add_library(imgui ${IMGUI_SOURCES})
+# Assuming you're using OpenGL3 and glfw3 for imgui's backends
+add_library(imgui-sdl2-opengl3 
+  ${IMGUI_DIR}/backends/imgui_impl_sdl2.cpp 
+  ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
 
 # Pass CMake settings to source header
 configure_file(
@@ -73,17 +83,17 @@ configure_file(
 )
 
 # Folders to include
-# set(INCLUDE_DIR_RXCPP ${SOURCE_DIR}/include/rxcpp)
 include_directories(
-
-  # ${INCLUDE_DIR_RXCPP}
   ${OPENGL_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIRS}
-  ${GLFW_INCLUDE_DIRS}
   ${GLM_INCLUDE_DIRS}
   ${SDL2_INCLUDE_DIRS}
   ${ASSIMP_INCLUDE_DIRS}
   ${UUID_LIBRARY}
+  ${SOIL_INCLUDE_DIRS}
+  ${OPENAL_INCLUDE_DIR}
+  imgui PUBLIC ${IMGUI_DIR}
+  imgui-sdl2-opengl3 PUBLIC ${IMGUI_DIR}/backends 
 )
 
 # -- -- -- -- -- -- -- -- -- -- -- -- -- -- Source file inclusion -- -- -- -- -- -- -- -- -- -- -- -- -- -
@@ -115,7 +125,20 @@ endforeach()
 # Give files for building application
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${SOURCE_DIR}/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} glfw ${GLM_LIBRARIES} ${SDL2_LIBRARIES} assimp fmt::fmt ${UUID_LIBRARY})
+target_link_libraries(
+  ${PROJECT_NAME}
+  ${OPENGL_LIBRARIES}
+  ${GLEW_LIBRARIES}
+  ${GLM_LIBRARIES}
+  ${SDL2_LIBRARIES}
+  assimp
+  fmt::fmt
+  ${UUID_LIBRARY}
+  ${SOIL_LIBRARIES}
+  ${OPENAL_LIBRARY}
+  imgui-sdl2-opengl3
+  imgui
+)
 
 # Include doxygen lists file
 include(${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLists.txt)

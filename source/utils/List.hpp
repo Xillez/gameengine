@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../public/typedef.hpp"
 
 #include <vector>
