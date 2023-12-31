@@ -28,48 +28,30 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_MODULE_PATH ${PROJECT_PATH})
-
 # Set the output to the bin folder
 set(PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(OUTPUT_PATH ${PROJECT_PATH}/build)
 set(EXECUTABLE_OUTPUT_PATH ${OUTPUT_PATH}/bin)
 set(SOURCE_DIR ${PROJECT_PATH}/source)
 
-# Determine Platform
+set(LIBS_INCLUDE_DIRS)
+set(LIBS_BINARIES)
+
+# Determine platform, set generator, find library includes and binary directories
 if(APPLE)
-    message("macOS build")
-    include(${CMAKE_CURRENT_SOURCE_DIR}/MacOSConfig.cmake)
+    message("MacOS build")
+    include(${PROJECT_PATH}/MacOSConfig.cmake)
+    set(OS_NAME "MACOS")
 elseif(UNIX AND NOT APPLE)
     message("Linux build")
-    set(LINUX 1)
-    set(WINDOWS 0)
     set(OS_NAME "LINUX")
-    include(${CMAKE_CURRENT_SOURCE_DIR}/LinuxConfig.cmake)
+    include(${PROJECT_PATH}/LinuxConfig.cmake)
 elseif(WIN32)
     message("Windows build")
-    set(LINUX 0)
-    set(WINDOWS 1)
     set(OS_NAME "WIN32")
-    include(${CMAKE_CURRENT_SOURCE_DIR}/WindowsConfig.cmake)
+    include(${PROJECT_PATH}/WindowsConfig.cmake)
 endif()
 
-# Add the path to your CMake modules if CMake can't find them.
-# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-set(OpenGL_GL_PREFERENCE "LEGACY")
-find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(glm REQUIRED)
-find_package(SDL2 REQUIRED)
-
-# Manually specify the paths to the ASSIMP headers and libraries
-set(ASSIMP_INCLUDE_DIRS "/usr/include/")
-set(ASSIMP_INCLUDE_DIRS "/usr/include/")
-set(ASSIMP_LIBRARIES "/usr/lib/x86_64-linux-gnu/libassimp.so")
-find_package(ASSIMP REQUIRED)
-find_library(UUID_LIBRARY NAMES uuid)
-find_package(fmt REQUIRED)
-find_package(SOIL REQUIRED)
 # ----------------------------------- IMGUI ------------------------------------
 # Add the ImGui library
 set(IMGUI_DIR ${PROJECT_PATH}/imgui)
@@ -83,14 +65,7 @@ add_library(imgui-sdl2-opengl3
 
 # Folders to include
 include_directories(
-    ${OPENGL_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIRS}
-    ${GLM_INCLUDE_DIRS}
-    ${SDL2_INCLUDE_DIRS}
-    ${ASSIMP_INCLUDE_DIRS}
-    ${UUID_LIBRARY}
-    ${SOIL_INCLUDE_DIRS}
-    ${OPENAL_INCLUDE_DIR}
+    ${LIBS_INCLUDE_DIRS}
     imgui PUBLIC ${IMGUI_DIR}
     imgui-sdl2-opengl3 PUBLIC ${IMGUI_DIR}/backends 
 )
@@ -132,15 +107,7 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${SOURCE_DIR}/main.cpp)
 
 target_link_libraries(
     ${PROJECT_NAME}
-    ${OPENGL_LIBRARIES}
-    ${GLEW_LIBRARIES}
-    ${GLM_LIBRARIES}
-    ${SDL2_LIBRARIES}
-    assimp
-    fmt::fmt
-    ${UUID_LIBRARY}
-    ${SOIL_LIBRARIES}
-    ${OPENAL_LIBRARY}
+    ${LIBS_BINARIES}
     imgui-sdl2-opengl3
     imgui
 )

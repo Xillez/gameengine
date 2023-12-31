@@ -1,4 +1,4 @@
-set(CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
+set(CMAKE_MODULE_PATH ${PROJECT_PATH})
 
 # Add the path to your CMake modules if CMake can't find them.
 # list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -15,13 +15,25 @@ find_package(ASSIMP REQUIRED)
 find_library(UUID_LIBRARY NAMES uuid)
 find_package(fmt REQUIRED)
 find_package(SOIL REQUIRED)
-# ----------------------------------- IMGUI ------------------------------------
-# Add the ImGui library
-set(IMGUI_DIR ${PROJECT_PATH}/imgui)
-file(GLOB IMGUI_SOURCES ${IMGUI_DIR}/*.cpp ${IMGUI_DIR}/*.h)
-add_library(imgui ${IMGUI_SOURCES})
-# Assuming you're using OpenGL3 and glfw3 for imgui's backends
-add_library(imgui-sdl2-opengl3 
-    ${IMGUI_DIR}/backends/imgui_impl_sdl2.cpp 
-    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+
+set(LIBS_INCLUDE_DIRS
+    ${OPENGL_INCLUDE_DIR}
+    ${GLEW_INCLUDE_DIRS}
+    ${GLM_INCLUDE_DIRS}
+    ${SDL2_INCLUDE_DIRS}
+    ${ASSIMP_INCLUDE_DIRS}
+    ${UUID_LIBRARY}
+    ${SOIL_INCLUDE_DIRS}
+    ${OPENAL_INCLUDE_DIR}
+)
+set(LIBS_BINARIES
+    ${OPENGL_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${GLM_LIBRARIES}
+    ${SDL2_LIBRARIES}
+    assimp
+    fmt::fmt
+    ${UUID_LIBRARY}
+    ${SOIL_LIBRARIES}
+    ${OPENAL_LIBRARY}
 )
