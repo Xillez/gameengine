@@ -2,22 +2,24 @@
 #include <functional>
 #include <unordered_map>
 
-//#include "rx.hpp"
-
-#include "./EventBus.hpp"
-#include "./Event.hpp"
+#include "InputHandler.hpp"
+#include "InputEvent.hpp"
 #include "../utils/Logging.hpp"
 
-// static
-bool EventBus::emit(Event event)
+// virtual
+void InputHandler::emit(InputEvent event)
 {
     LOG_INFO("Emitting event: " + event.type);
-    //EventBus::subject.get_subscriber().on_next(event);
-    return true;
 }
 
-// static
-/*rxcpp::subscription*/ void EventBus::onEvent(EventType type, std::function<void(Event event)> action)
+// virtual
+void InputHandler::broadcast(InputEvent event)
+{
+    LOG_INFO("Broadcasting event: " + event.type);
+}
+
+// virtual
+void InputHandler::onEvent(EventType type, std::function<void(Event event)> action)
 {
     /*return EventBus::subject.get_observable()
         .filter([type](Event e){ return e.type == type; })

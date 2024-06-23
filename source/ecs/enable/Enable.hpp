@@ -1,5 +1,7 @@
+#pragma once
+
 /**
- * Base class that add an enabled state.
+ * Base class that adds an enabled state.
  */
 class Enable
 {

@@ -120,7 +120,6 @@ int main(int argc, char const *argv[])
     ImGui_ImplSDL2_InitForOpenGL(window, glContext);
     ImGui_ImplOpenGL3_Init("#version 150"); // Replace 'glsl_version' with your OpenGL shader version, e.g., "#version 150"
 
-
     ModelAsset asset = ModelAsset("../assets/e-51dm-on-the-deck/source/e51dm deck.gltf");
 
     Scene scene;

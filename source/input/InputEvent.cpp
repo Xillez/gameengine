@@ -1,16 +1,16 @@
 #include <string>
 #include <functional>
 
-#include "./Event.hpp"
+#include "InputEvent.hpp"
 
-Event::Event(EventType type, void* data)
+InputEvent::InputEvent(EventType type, void* data) : Event(type, data)
 {
     this->type = type;
     if (data != nullptr)
         this->data = data;
 }
 
-Event::~Event()
+InputEvent::~InputEvent()
 {
     //
 }
