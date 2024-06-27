@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../Component.hpp"
+#include <vector>
 
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm.hpp>
+
+#include "Component.hpp"
 
 class Entity;
 
@@ -30,7 +31,7 @@ public:
     glm::vec3 GetEulerRotation();
 
     void SetEulerRotation(glm::vec3 rot);
-    
+
     glm::vec3 GetScale();
 
     void SetScale(glm::vec3 scale);

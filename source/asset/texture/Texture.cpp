@@ -1,6 +1,6 @@
-#include "./Texture.hpp"
+#include "Texture.hpp"
 
-#include "./TextureAsset.hpp"
+#include "TextureAsset.hpp"
 
 Texture::Texture()
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../public/typedef.hpp"
+#include "typedef.hpp"
 
 #include <vector>
 #include <unordered_map>

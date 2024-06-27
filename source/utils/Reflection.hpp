@@ -7,7 +7,7 @@
 
 #include "fmt/format.h"
 
-#include "./Utils.hpp"
+#include "Utils.hpp"
 
 class Reflection
 {

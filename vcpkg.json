@@ -1,0 +1,15 @@
+{
+  "name": "skyforgeengine",
+  "version-string": "0.0.1",
+  "dependencies": [
+    "fmt",
+    "ms-gsl",
+    "stduuid",
+    "glm",
+    "glew",
+    "sdl2",
+    "soil2",
+    "assimp",
+    "openal-soft"
+  ]
+}

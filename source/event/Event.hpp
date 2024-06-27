@@ -9,15 +9,32 @@
 enum EventType
 {
     BatchEvent,
-    RenderEvent,
-    ResizeEvent,
-    TransformUpdate,
-    DestructionEvent
-};
-enum EventPhase
-{
-    Decending,
-    Ascending
+
+    AssetsLoadAllEvent,
+    AssetLoadingEvent,
+    AssetLoadedEvent,
+    AssetUpdatedEvent,
+    AllAssetsLoadedEvent,
+
+    WorldCreatedEvent,
+
+    SceneCreatedEvent,
+    SceneContentUpdateEvent,
+
+    PageResizeEvent,
+
+    ValidationEvent,
+
+    DestructionEvent,
+
+    CanvasCreatedEvent,
+    CanvasResizeEvent,
+    CanvasUpdateEvent,
+    CanvasReassignedEvent,
+    CanvasDestroyedEvent,
+
+    RendererResizeEvent,
+    RenderEvent
 };
 
 /**
@@ -27,10 +44,7 @@ class Event
 {
 public:
     EventType type;
-    EventType phase;
     void* data = nullptr;
-    void* sender = nullptr;
-    void* target = nullptr;
 
     Event(EventType type, void* data = nullptr);
     ~Event();

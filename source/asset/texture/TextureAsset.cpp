@@ -1,4 +1,5 @@
-#include "./TextureAsset.hpp"
+#include "TextureAsset.hpp"
+#include "soil.hpp"
 
 TextureAsset::TextureAsset(const std::string &filepath)
 {

@@ -1,11 +1,12 @@
 #pragma once
-#include "../public/typedef.hpp"
-#include "./Entity.hpp"
 
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
 #include <type_traits>
+
+#include "typedef.hpp"
+#include "Entity.hpp"
 
 // ################################################################################################
 // #                                                                                              #

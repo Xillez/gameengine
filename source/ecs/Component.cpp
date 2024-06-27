@@ -1,14 +1,13 @@
-#include "./Component.hpp"
 #include "Component.hpp"
 
-// REMEMBER: Forward declared in hpp file!
-#include "./Entity.hpp"
+// NOTE: Forward declared in hpp file!
+#include "Entity.hpp"
 
-#include "../utils/Utils.hpp"
+#include "Utils.hpp"
 
 Component::Component()
 {
-	this->id = uuid();
+	this->id = get_uuid();
 	this->started = false;
 	this->parent = nullptr;
 }

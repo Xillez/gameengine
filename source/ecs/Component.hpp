@@ -1,9 +1,10 @@
 #pragma once
-#include "../public/typedef.hpp"
 #include <algorithm>
 #include <type_traits>
 #include <typeinfo>
 #include <string>
+
+#include "typedef.hpp"
 
 class Entity;
 

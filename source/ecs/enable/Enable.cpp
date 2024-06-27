@@ -1,4 +1,4 @@
-#include "./Enable.hpp"
+#include "Enable.hpp"
 
 bool Enable::isEnabled()
 {

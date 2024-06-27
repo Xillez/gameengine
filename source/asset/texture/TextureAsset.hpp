@@ -1,13 +1,13 @@
 #pragma once
 
+#include "Config.hpp"
+
 #include <string>
 #include <map>
 #include <functional>
 
-#include <SOIL/SOIL.h>
-
-#include "../Asset.hpp"
-#include "./Texture.hpp"
+#include "Asset.hpp"
+#include "Texture.hpp"
 
 class TextureAsset : public Asset<Texture>
 {
@@ -17,7 +17,7 @@ public:
     ~TextureAsset();
 
     Texture& Get();
-    
+
     Texture& Load(const std::string& filepath);
 
 private:

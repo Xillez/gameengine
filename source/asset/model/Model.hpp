@@ -9,7 +9,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "./Mesh.hpp"
+#include "Mesh.hpp"
 
 class ModelAsset;
 

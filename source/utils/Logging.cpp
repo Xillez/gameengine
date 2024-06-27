@@ -1,5 +1,5 @@
 #include "Logging.hpp"
-#include "../config/Config.hpp"
+#include "Config.hpp"
 
 #include <iostream>
 #include <stdio.h>

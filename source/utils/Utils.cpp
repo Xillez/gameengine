@@ -1,9 +1,12 @@
-#include "./Utils.hpp"
+#include "../config/Config.hpp"
 
 #include <chrono>
 #include <random>
-#include <uuid/uuid.h>
+
+#include "uuid.hpp"
 #include <glm/gtc/constants.hpp>
+
+#include "./Utils.hpp"
 
 std::string generate_random_string()
 {
@@ -27,15 +30,28 @@ std::string generate_random_string()
     return result;
 }
 
-std::string uuid()
+std::string get_uuid()
 {
-    uuid_t uuid;
-    char uuid_str[37];
+    #if defined(LINUX)
+        uuid_t uuid;
+        char uuid_str[37];
 
-    uuid_generate_random(uuid);
-    uuid_unparse_lower(uuid, uuid_str);
+        uuid_generate_random(uuid);
+        uuid_unparse_lower(uuid, uuid_str);
 
-    return std::string(uuid_str);
+        return std::string(uuid_str);
+
+    #elif defined(WINDOWS)
+        std::random_device rd;
+        auto seed_data = std::array<int, std::mt19937::state_size> {};
+        std::generate(std::begin(seed_data), std::end(seed_data), std::ref(rd));
+        std::seed_seq seq(std::begin(seed_data), std::end(seed_data));
+        std::mt19937 generator(seq);
+        uuids::uuid_random_generator gen{generator};
+
+        uuids::uuid const id = gen();
+        return uuids::to_string(id);
+    #endif
 }
 
 // Generate vertices for a sphere

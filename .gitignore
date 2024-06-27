@@ -1,19 +1,5 @@
 # *.obj
 
-# User defined ignores
-
-source/config/Config.hpp
-main.zip
-.vscode/
-lib/
-include/
-bin/
-/.metadata/
-3dview/
-source/main2.cpp
-assets/
-
-
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
@@ -571,3 +557,18 @@ __pycache__/
 
 
 # End of https://www.gitignore.io/api/git,c++,linux,cmake,windows,sublimetext,visualstudio,visualstudiocode
+
+# User defined ignores
+
+source/config/Config.hpp
+main.zip
+.vscode/
+lib/
+include/
+bin/
+/.metadata/
+3dview/
+source/main2.cpp
+assets/
+vcpkg/
+vcpkg_installed/

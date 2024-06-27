@@ -1,6 +1,6 @@
-#include "./Model.hpp"
+#include "Model.hpp"
 
-#include "./ModelAsset.hpp"
+#include "ModelAsset.hpp"
 
 Model::Model()
 {

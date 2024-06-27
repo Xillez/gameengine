@@ -3,11 +3,11 @@
 #include <string>
 #include <type_traits>
 #include <vector>
-#include <glm/glm.hpp>
+#include <glm.hpp>
 
 std::string generate_random_string();
 
-std::string uuid();
+std::string get_uuid();
 
 // Generate vertices for a sphere
 void generateSphere(float radius, unsigned int rings, unsigned int sectors, std::vector<glm::vec3>& vertices);

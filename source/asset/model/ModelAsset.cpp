@@ -1,4 +1,10 @@
-#include "./ModelAsset.hpp"
+#include <functional>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#include "ModelAsset.hpp"
 
 ModelAsset::ModelAsset(const std::string& filepath)
 {
@@ -18,7 +24,6 @@ Model &ModelAsset::Get()
 
 Model &ModelAsset::Load(const std::string &filepath)
 {
-    
     Assimp::Importer importer;
     this->model.scene = importer.ReadFile(filepath, aiProcess_Triangulate);
     return this->model;

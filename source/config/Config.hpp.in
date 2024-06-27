@@ -7,3 +7,11 @@
 #define DEBUG @DEBUG_BUILD@
 #define LOGGING @LOGGING@
 #define OS_NAME "@OS_NAME@"
+
+#if defined(_WIN32) || defined(_WIN64)
+    #define WINDOWS
+#elif defined(__linux__)
+    #define LINUX
+#else
+    #error "Unknown or unsupported OS"
+#endif

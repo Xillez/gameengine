@@ -1,13 +1,13 @@
-#include "Entity.hpp"
-
-#include "../utils/Utils.hpp"
-
 #include <iostream>
 #include <algorithm>
 
+#include "Entity.hpp"
+
+#include "Utils.hpp"
+
 Entity::Entity()
 {
-	this->id = uuid();
+	this->id = get_uuid();
 	this->started = false;
 	this->transform.SetEntity(this);
 }

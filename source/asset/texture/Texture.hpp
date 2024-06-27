@@ -1,12 +1,14 @@
 #pragma once
 
+#include "Config.hpp"
+
 #include <string>
 #include <map>
 #include <functional>
 
-#include <SOIL/SOIL.h>
+#include "uuid.hpp"
 
-#include "../Asset.hpp"
+#include "Asset.hpp"
 
 class TextureAsset;
 

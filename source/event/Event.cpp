@@ -1,7 +1,7 @@
 #include <string>
 #include <functional>
 
-#include "./Event.hpp"
+#include "Event.hpp"
 
 Event::Event(EventType type, void* data)
 {
@@ -12,5 +12,5 @@ Event::Event(EventType type, void* data)
 
 Event::~Event()
 {
-    //
+    delete this->data;
 }

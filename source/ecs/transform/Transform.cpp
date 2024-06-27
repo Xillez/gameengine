@@ -1,8 +1,8 @@
-#include "./Transform.hpp"
-
-#include "../Entity.hpp"
-
 #include <queue>
+
+#include "Transform.hpp"
+
+#include "Entity.hpp"
 
 Transform::Transform()
 {
@@ -90,7 +90,7 @@ void Transform::MarkAsDirty()
         Entity* entity = queue.front();
         queue.pop();
         entity->transform.MarkAsDirty();
-        
+
         for (Entity*& child : entity->GetChildren())
             queue.push(child);
     }

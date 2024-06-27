@@ -37,6 +37,9 @@ done
 BASEDIR=$(dirname "$0") # Get script location.
 
 printf "Switching to build directory: \"$BASEDIR/build\"\n"
+if [ ! -d "$BASEDIR/build" ]; then
+    mkdir "$BASEDIR/build"
+fi
 cd "$BASEDIR/build"
 
 printf "Running cmake...\n"

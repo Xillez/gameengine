@@ -1,10 +1,5 @@
 #pragma once
 
-#include "../public/typedef.hpp"
-#include "./Component.hpp"
-#include "./transform/Transform.hpp"
-//#include "../event/EventHandler.hpp"
-
 #include <iostream>
 #include <stdio.h>
 #include <string>
@@ -13,6 +8,11 @@
 #include <unordered_map>
 #include <algorithm>
 #include <type_traits>
+
+#include "typedef.hpp"
+#include "Component.hpp"
+#include "Transform.hpp"
+//#include "../event/EventHandler.hpp"
 
 /**
  * @brief Generic Entity with components.
@@ -54,7 +54,7 @@ public:
 
     /**
      * @brief Used for destroying an entity.
-     * 
+     *
      * @return true - Entity was destroyed.
      * @return false - Failed to destroy.
      */
@@ -62,7 +62,7 @@ public:
 
     /**
      * @brief Returns state telling wether this entity has started or not.
-     * 
+     *
      * @return true - Entity has been started.
      * @return false - Entity has only been initialized.
      */
@@ -74,9 +74,9 @@ public:
 
     /**
      * @brief Create new Component with next local (to entity) component id.
-     * 
+     *
      * @tparam Class - The subclass of Component.
-     * 
+     *
     @return std::string - The ID to the newly created component.
     */
     template<class Tclass>
@@ -96,7 +96,7 @@ public:
 
     /**
      * @brief Add a pre-defined component.
-     * 
+     *
      * @param component Component - Some component
      */
     template<class Tclass>
@@ -114,9 +114,9 @@ public:
     /**
      * @brief Get internal component on entity based on type, 
      * !NOTE! Template class given as type "Component" class will return any component, no guarrantee what you will get.
-     * 
+     *
      * @tparam Tclass - Class extended from Component.
-     * 
+     *
      * @return Component* - Pointer to internal component.
      */
     template<class Tclass>
@@ -135,9 +135,9 @@ public:
 
     /**
      * @brief Get internal component on entity.
-     * 
+     *
      * @tparam Tclass - Class extended from Component.
-     * 
+     *
      * @return std::vector<Component*> - Vector of pointer to internal component.
      */
     template<class Tclass>
@@ -157,62 +157,62 @@ public:
 
     /**
      * @brief Get the Component via ID
-     * 
+     *
      * @param id - Id of the component you want.
-     * 
+     *
      * @return Component* - Pointer to component found. If nothing found, nullptr returned.
      */
     virtual Component* GetComponentByID(std::string id);
 
     /**
      * @brief Removes an component by ID, all components without an owner gets removed aswell.
-     * 
+     *
      * @param component - Pointer to component to be removed.
      */
     void RemoveComponent(Component* component);
 
     /**
      * @brief Removes an component by ID, all components without an owner gets removed aswell.
-     * 
+     *
      * @param id - ID of component to be removed.
      */
     void RemoveComponentByID(std::string id);
 
     /**
      * @brief Get child entity by ID.
-     * 
+     *
      * @param id - Id of wanted entity.
-     * 
+     *
      * @return Entity* - Pointer to entity found. If nothing found, nullptr returned.
      */
     Entity* GetChildByID(std::string id);
 
     /**
      * @brief Get children.
-     * 
+     *
      * @return std::vector<Entity*>& - List of all children.
      */
     std::vector<Entity*>& GetChildren();
 
     /**
      * @brief Get chile entity by ID.
-     * 
+     *
      * @param id - Id of wanted entity.
-     * 
+     *
      * @return Entity* - Pointer to entity found. If nothing found, nullptr returned.
      */
     void Add(Entity* entity);
 
     /**
-     * @brief Removed the given entity from the 
-     * 
+     * @brief Removed the given entity from the
+     *
      * @param entity Entity* - Entity to be removed.
      */
     void Remove(Entity* entity);
 
     /**
      * @brief Set the parent entity.
-     * 
+     *
      * @param entity Entity* - parent entity.
      */
     void SetParent(Entity* entity);
@@ -225,7 +225,7 @@ public:
     // #######################################
     // ########## Utility functions ##########
     // #######################################
-    
+
     /**
      * @brief Returns the id of the entity.
      */

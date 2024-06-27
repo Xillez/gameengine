@@ -1,16 +1,29 @@
-if(UNIX)
-  SET(LINUX 1)
-  SET(WINDOWS 0)
-elseif(WIN32)
-  SET(LINUX 0)
-  SET(WINDOWS 1)
+# Set policy CMP0054 to NEW
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
 endif()
 
-# OS specific before executable addition
-if(WINDOWS)
-  set(CMAKE_GENERATOR "MinGW Makefiles" CACHE INTERNAL "" FORCE)
-endif(WINDOWS)
+# Determine Platform
+if(UNIX AND NOT APPLE)
+    set(OS_NAME "LINUX")
+elseif(WIN32)
+    set(OS_NAME "WIN32")
+elseif(APPLE)
+    set(OS_NAME "MACOS")
+endif()
 
-if(LINUX)
-  set(CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
-endif(LINUX)
+# Define project config directory
+set(CMAKE_CONFIG_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+# OS specific before executable addition
+if(OS_NAME STREQUAL LINUX)
+  include(${CMAKE_CONFIG_DIRECTORY}/linux/PreLoad.cmake)
+endif()
+
+if(OS_NAME STREQUAL WIN32)
+  include(${CMAKE_CONFIG_DIRECTORY}/windows/PreLoad.cmake)
+endif()
+
+if(OS_NAME STREQUAL MACOS)
+  include(${CMAKE_CONFIG_DIRECTORY}/macos/PreLoad.cmake)
+endif()

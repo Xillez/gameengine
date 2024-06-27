@@ -1,5 +1,5 @@
-#include "./Renderer.hpp"
-#include "../utils/Logging.hpp"
+#include "Renderer.hpp"
+#include "Logging.hpp"
 
 Renderer::Renderer()
 {

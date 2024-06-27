@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <glm/glm.hpp>
+#include <glm.hpp>
 
 class ModelAsset;
 class Model;

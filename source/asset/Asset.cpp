@@ -1,4 +1,4 @@
-#include "./Asset.hpp"
+#include "Asset.hpp"
 
-#include "./model/ModelAsset.hpp"
-#include "./texture/TextureAsset.hpp"
+#include "ModelAsset.hpp"
+#include "TextureAsset.hpp"

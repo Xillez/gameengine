@@ -1,10 +1,17 @@
 # Set cmake minimum
 cmake_minimum_required(VERSION 3.10)
 
+# Define project config directory
+set(CMAKE_CONFIG_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+# Include utils file
+include(${CMAKE_CONFIG_DIRECTORY}/Utils.cmake)
+
 # Set project name
-set(PROJECT_NAME "SkyForgeEngine")
-set(VERSION "v0.1")
-set(VERSION_NAME "Sponge")
+set(PROJECT_NAME $ENV{PROJECT_NAME})
+set(VERSION $ENV{VERSION})
+set(VERSION_NAME $ENV{VERSION_NAME})
+set(ARCHITECTURE $ENV{ARCHITECTURE})
 
 # "true" to build for debug or "false" to build for release.
 set(DEBUG_BUILD "true")
@@ -15,18 +22,30 @@ set(LOGGING "true")
 # Automatic setup of release and debug build setting
 if(DEBUG_BUILD STREQUAL "true")
     set(CMAKE_BUILD_TYPE Debug)
+                    set(CMAKE_BUILD_TYPE Debug)
+                    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 else()
     set(CMAKE_BUILD_TYPE Release)
     set(LOGGING "false")
 endif()
 
-# Set project name
-project(${PROJECT_NAME})
+# Determine platform
+if(UNIX AND NOT APPLE)
+    message("Linux build")
+    set(OS_NAME "LINUX")
+elseif(WIN32)
+    message("Windows build")
+    set(OS_NAME "WIN32")
+elseif(APPLE) # TODO: Implement eventually.
+    message("MacOS build")
+    message(FATAL_ERROR "TODO: Implement MacOS build.")
+    set(OS_NAME "MACOS")
+else()
+    message(FATAL_ERROR "Unsupported platform")
+endif()
 
-# Set cmake options + custom compiler
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+# Set project name
+project(${PROJECT_NAME} VERSION ${VERSION})
 
 # Set the output to the bin folder
 set(PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
@@ -34,41 +53,12 @@ set(OUTPUT_PATH ${PROJECT_PATH}/build)
 set(EXECUTABLE_OUTPUT_PATH ${OUTPUT_PATH}/bin)
 set(SOURCE_DIR ${PROJECT_PATH}/source)
 
-set(LIBS_INCLUDE_DIRS)
-set(LIBS_BINARIES)
+# Set cmake options + custom compiler
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Determine platform, set generator, find library includes and binary directories
-if(APPLE)
-    message("MacOS build")
-    include(${PROJECT_PATH}/MacOSConfig.cmake)
-    set(OS_NAME "MACOS")
-elseif(UNIX AND NOT APPLE)
-    message("Linux build")
-    set(OS_NAME "LINUX")
-    include(${PROJECT_PATH}/LinuxConfig.cmake)
-elseif(WIN32)
-    message("Windows build")
-    set(OS_NAME "WIN32")
-    include(${PROJECT_PATH}/WindowsConfig.cmake)
-endif()
-
-# ----------------------------------- IMGUI ------------------------------------
-# Add the ImGui library
-set(IMGUI_DIR ${PROJECT_PATH}/imgui)
-file(GLOB IMGUI_SOURCES ${IMGUI_DIR}/*.cpp ${IMGUI_DIR}/*.h)
-add_library(imgui ${IMGUI_SOURCES})
-# Assuming you're using OpenGL3 and glfw3 for imgui's backends
-add_library(imgui-sdl2-opengl3 
-    ${IMGUI_DIR}/backends/imgui_impl_sdl2.cpp 
-    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
-)
-
-# Folders to include
-include_directories(
-    ${LIBS_INCLUDE_DIRS}
-    imgui PUBLIC ${IMGUI_DIR}
-    imgui-sdl2-opengl3 PUBLIC ${IMGUI_DIR}/backends 
-)
+set(CMAKE_GENERATOR_PLATFORM ${ARCHITECTURE})
 
 # Pass CMake settings to source header
 configure_file(
@@ -77,45 +67,69 @@ configure_file(
     @ONLY
 )
 
-# -- -- -- -- -- -- -- -- -- -- -- -- -- -- Source file inclusion -- -- -- -- -- -- -- -- -- -- -- -- -- -
-# Define a list of extensions of header files
-set(SOURCE_EXTENSIONS ".c" ".cpp")
+# ---------------------------- Source file inclusion ---------------------------
 
-# Define a list of root directories to search
-set(SOURCE_SEARCH_DIRS ${SOURCE_DIR})
+set(SOURCE_EXTENSIONS ".c" ".cpp") # Define a list of extensions of source files
+set(SOURCE_SEARCH_DIRS ${SOURCE_DIR}) # Define a list of root directories to search
+set(SOURCE_FILES) # Define a list to store source files
+find_files_in_directories("${SOURCE_EXTENSIONS}" "${SOURCE_SEARCH_DIRS}" SOURCE_FILES)
+print_list("Source files" "${SOURCE_FILES}")
 
-# Use a loop to search for header files in each directory with each extension
-foreach(SOURCE_SEARCH_DIR ${SOURCE_SEARCH_DIRS})
-    foreach(SOURCE_EXTENSION ${SOURCE_EXTENSIONS})
-        file(GLOB_RECURSE SOURCEFILES_TEMP "${SOURCE_SEARCH_DIR}/**/*${SOURCE_EXTENSION}")
-        list(APPEND SOURCE_FILES ${SOURCEFILES_TEMP})
-    endforeach()
-endforeach()
+# ---------------------------- Header file inclusion ---------------------------
 
-# Remove duplicates from the list of directories
-list(REMOVE_DUPLICATES SOURCE_FILES)
+set(HEADER_EXTENSIONS ".h" ".hpp") # Define a list of extensions of header files
+set(HEADER_SEARCH_DIRS ${SOURCE_DIR}) # Define a list of root directories to search
+set(HEADER_FILES) # Define a list to store header files
+find_files_in_directories("${HEADER_EXTENSIONS}" "${HEADER_SEARCH_DIRS}" HEADER_FILES)
 
-# Print the list of directories
-message("Source files:")
+set(HEADER_DIRS) # Define a list to store header directories
+get_header_directories("${HEADER_FILES}" HEADER_DIRS)
+print_list("Header directories" "${HEADER_DIRS}")
+print_list("Header files" "${HEADER_FILES}")
 
-foreach(SOURCE_FILE ${SOURCE_FILES})
-    message("- ${SOURCE_FILE}")
-endforeach()
+# ----------------------------------- IMGUI ------------------------------------
+# Specify where the header files are
+set(IMGUI_DIR ${PROJECT_PATH}/imgui)
+set(IMGUI_INCLUDE_DIRS ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+
+set(HEADER_EXTENSIONS ".h" ".hpp") # Define a list of extensions of header files
+set(IMGUI_HEADER_FILES) # Define a list to store source files
+find_files_in_directories("${HEADER_EXTENSIONS}" "${IMGUI_INCLUDE_DIRS}" IMGUI_HEADER_FILES TRUE)
+print_list("IMGUI Header files" "${IMGUI_HEADER_FILES}")
+
+set(SOURCE_EXTENSIONS ".c" ".cpp") # Define a list of extensions of source files
+set(IMGUI_SOURCE_FILES) # Define a list to store source files
+find_files_in_directories("${SOURCE_EXTENSIONS}" "${IMGUI_DIR}" IMGUI_SOURCE_FILES TRUE)
+list(APPEND IMGUI_SOURCE_FILES
+    "${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
+    "${IMGUI_DIR}/backends/imgui_impl_sdl2.cpp"
+)
+print_list("IMGUI Source files" "${IMGUI_SOURCE_FILES}")
+# ------------------------------------ IMGUI -----------------------------------
+
+include_directories(${HEADER_DIRS} ${IMGUI_INCLUDE_DIRS})
 
 # Give files for building application
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${SOURCE_DIR}/main.cpp)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${IMGUI_SOURCE_FILES} ${SOURCE_DIR}/main.cpp)
+# Set the project to be a WIN32 executable
+if(OS_NAME STREQUAL "WIN32")
+    #set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
 
-target_link_libraries(
-    ${PROJECT_NAME}
-    ${LIBS_BINARIES}
-    imgui-sdl2-opengl3
-    imgui
-)
+# Determine platform, find library includes and binary directories
+if(OS_NAME STREQUAL "LINUX")
+    include(${CMAKE_CONFIG_DIRECTORY}/linux/Dependencies.cmake)
+elseif(OS_NAME STREQUAL "WIN32")
+    include(${CMAKE_CONFIG_DIRECTORY}/windows/Dependencies.cmake)
+elseif(OS_NAME STREQUAL "MACOS") # TODO: Implement eventually.
+    message(FATAL_ERROR "TODO: Implement MacOS build.")
+    include(${CMAKE_CONFIG_DIRECTORY}/macos/Dependencies.cmake)
+endif()
 
 # Include doxygen lists file
-include(${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLists.txt)
-
-execDoxygen()
+#include(${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLists.txt)
+#
+#execDoxygen()
 
 # File copy example
 # file(COPY ${SOURCE_DIR}/libs/dll/glew32.dll DESTINATION ${PROJECT_BINARY_DIR})

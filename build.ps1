@@ -1,33 +1,25 @@
-function Print-Separator {
+function Write-Separator {
     Write-Output "###############################################"
 }
 
-Print-Separator
-Write-Output "\t\tSwitching to build directory: $((Get-Location).Path)\build"
-Print-Separator
+RETURN_DIRECTORY = $((Get-Location).Path)
 
-cd "$((Get-Location).Path)\build"
+Write-Separator
+Write-Output "Switching to build directory: $RETURN_DIRECTORY\build"
+Set-Location "$RETURN_DIRECTORY\build"
 
-Print-Separator
-Write-Output "\t\tRunning cmake...\n"
-Print-Separator
-
+Write-Separator
+Write-Output "Running cmake:"
 cmake ..
 
-Print-Separator
-Write-Output "\t\tBuilding program...\n"
-Print-Separator
-
+Write-Separator
+Write-Output "Building program:"
 mingw32-make
 
-Print-Separator
-Write-Output "\t\tRunning application...\n"
-Print-Separator
+Write-Separator
+Write-Output "Running application:"
+./bin/SkyForgeEngine.exe
 
-./bin/ecs.exe
-
-Print-Separator
-Write-Output "\t\tSwitching back to working directory\n"
-Print-Separator
-
-cd "$((Get-Location).Path)"
+Write-Separator
+Write-Output "Switching back to working directory: $RETURN_DIRECTORY"
+Set-Location "$RETURN_DIRECTORY"
