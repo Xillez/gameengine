@@ -17,6 +17,7 @@ public:
     void pushLayerAt(std::shared_ptr<Layer> layer, int index = -1);
     std::shared_ptr<Layer> popLayerAt(int index = -1);
     void swapLayers(int index1, int index2);
+    int size() const;
 
     std::vector<std::shared_ptr<Layer>>::iterator begin();
     std::vector<std::shared_ptr<Layer>>::iterator end();

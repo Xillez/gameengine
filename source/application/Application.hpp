@@ -1,5 +1,7 @@
 #pragma once
 
+#include "_sdl.hpp"
+
 #include "LayerStack.hpp"
 
 class Application
@@ -14,9 +16,13 @@ public:
     Application &operator=(const Application &other) = delete;
     Application &operator=(Application &&other) = delete;
 
-    void init();
+    int init();
     int run();
 
 private:
     LayerStack layerStack;
+
+    // Main application window and glContext
+    SDL_Window* window;
+    SDL_GLContext glContext;
 };

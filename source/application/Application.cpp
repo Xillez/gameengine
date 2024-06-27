@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include <GL/glew.h>
-#include "_sdl.hpp"
 #include <AL/al.h>
 #include <AL/alc.h>
 #include "imgui.h"
@@ -72,45 +71,32 @@ void LogBuildInfo()
     #endif
 }
 
-bool initSDL()
-{
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-        std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-        return false;
-    }
-    return true;
-}
-
-void Application::init()
-{
-    //
-}
-
-int Application::run()
+int Application::init()
 {
     LogBuildInfo();
 
     // Failed to initialize SDL.
-    if (!initSDL())
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+        std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
         return -1;
+    }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4); // Set major version (e.g., 3)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6); // Set minor version (e.g., 3 for OpenGL 3.3)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); // Use core profile
 
     // Create a GLFW window
-    SDL_Window* window = SDL_CreateWindow("SkyForge Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
-    if (window == nullptr) {
+    this->window = SDL_CreateWindow("SkyForge Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
+    if (this->window == nullptr) {
         std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
         return 1;
     }
 
-    SDL_GLContext glContext = SDL_GL_CreateContext(window);
-    if (!glContext) {
+    this->glContext = SDL_GL_CreateContext(this->window);
+    if (!this->glContext) {
         std::cerr << "Could not create GL context. Error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(window);
+        SDL_DestroyWindow(this->window);
         SDL_Quit();
         return 1;
     }
@@ -119,8 +105,8 @@ int Application::run()
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
         std::cerr << "Failed to initialize GLEW" << std::endl;
-        SDL_GL_DeleteContext(glContext);
-        SDL_DestroyWindow(window);
+        SDL_GL_DeleteContext(this->glContext);
+        SDL_DestroyWindow(this->window);
         SDL_Quit();
         return -1;
     }
@@ -135,9 +121,14 @@ int Application::run()
     ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer backends
-    ImGui_ImplSDL2_InitForOpenGL(window, glContext);
+    ImGui_ImplSDL2_InitForOpenGL(this->window, this->glContext);
     ImGui_ImplOpenGL3_Init("#version 150"); // Replace 'glsl_version' with your OpenGL shader version, e.g., "#version 150"
 
+    return 0;
+}
+
+int Application::run()
+{
     //ModelAsset asset = ModelAsset("../assets/e-51dm-on-the-deck/source/e51dm deck.gltf");
 
     Scene scene;
@@ -206,6 +197,7 @@ int Application::run()
         // Render ImGui over your game
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
@@ -216,13 +208,13 @@ int Application::run()
         }
 
         // Swap front and back buffers
-        SDL_GL_SwapWindow(window);
+        SDL_GL_SwapWindow(this->window);
     }
 
     // Clean up
     scene.Destroy();
-    SDL_GL_DeleteContext(glContext);
-    SDL_DestroyWindow(window);
+    SDL_GL_DeleteContext(this->glContext);
+    SDL_DestroyWindow(this->window);
     SDL_Quit();
 
     return 0;

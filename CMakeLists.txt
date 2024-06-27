@@ -72,7 +72,7 @@ if(OS_NAME STREQUAL "LINUX")
     # Custom cmake modules for linux environments.
     list(APPEND CMAKE_MODULE_PATH "${PROJECT_PATH}")
 elseif(OS_NAME STREQUAL "WIN32")
-    #
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 elseif(OS_NAME STREQUAL "MACOS") # TODO: Implement eventually.
     #
 endif()

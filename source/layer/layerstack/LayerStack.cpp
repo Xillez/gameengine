@@ -44,6 +44,11 @@ void LayerStack::swapLayers(int index1, int index2)
     this->layers[index2] = temp;
 }
 
+int LayerStack::size() const
+{
+    return this->layers.size();
+}
+
 std::vector<std::shared_ptr<Layer>>::iterator LayerStack::begin()
 {
     return this->layers.begin();
