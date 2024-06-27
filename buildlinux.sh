@@ -34,6 +34,8 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+source ./scripts/project_vars.sh
+
 BASEDIR=$(dirname "$0") # Get script location.
 
 printf "Switching to build directory: \"$BASEDIR/build\"\n"

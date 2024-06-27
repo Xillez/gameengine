@@ -2,7 +2,7 @@
 
 #include "Config.hpp"
 
-#ifdef defined(LINUX)
+#if defined(LINUX)
     #include <SOIL/SOIL.h>
 #elif defined(WINDOWS)
     #include <SOIL2/SOIL2.h>

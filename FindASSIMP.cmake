@@ -2,7 +2,7 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(ASSIMP_ARCHITECTURE "64")
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
   set(ASSIMP_ARCHITECTURE "32")
-endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+endif()
 
 if(WIN32)
   set(ASSIMP_ROOT_DIR CACHE PATH "ASSIMP root directory")
@@ -19,7 +19,7 @@ if(WIN32)
     set(ASSIMP_MSVC_VERSION "vc120")
   elseif(MSVC14)
     set(ASSIMP_MSVC_VERSION "vc140")
-  endif(MSVC12)
+  endif()
 
   if(MSVC12 OR MSVC14)
     find_path(ASSIMP_LIBRARY_DIR
@@ -49,32 +49,37 @@ if(WIN32)
   endif()
 
 else(WIN32)
-  find_path(
-    assimp_INCLUDE_DIRS
-    NAMES assimp/postprocess.h assimp/scene.h assimp/version.h assimp/config.h assimp/cimport.h
+  find_path(ASSIMP_INCLUDE_DIR
+    NAMES
+    assimp/anim.h
     PATHS /usr/local/include
-    PATHS /usr/include/
+          /usr/include/
   )
 
-  find_library(
-    assimp_LIBRARIES
+  find_library(ASSIMP_LIBRARY
     NAMES assimp
     PATHS /usr/local/lib/
-    PATHS /usr/lib64/
-    PATHS /usr/lib/
+          /usr/lib64/
+          /usr/lib/
   )
 
-  if(assimp_INCLUDE_DIRS AND assimp_LIBRARIES)
-    SET(assimp_FOUND TRUE)
-  ENDIF(assimp_INCLUDE_DIRS AND assimp_LIBRARIES)
+  if(ASSIMP_INCLUDE_DIR AND ASSIMP_LIBRARY)
+    set(ASSIMP_FOUND TRUE)
+    set(ASSIMP_LIBRARIES ${ASSIMP_LIBRARY})
+    set(ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
+  else()
+    set(ASSIMP_FOUND FALSE)
+  endif()
 
-  if(assimp_FOUND)
+  if(ASSIMP_FOUND)
     if(NOT assimp_FIND_QUIETLY)
-      message(STATUS "Found asset importer library: ${assimp_LIBRARIES}")
-    endif(NOT assimp_FIND_QUIETLY)
-  else(assimp_FOUND)
+      message(STATUS "Found Assimp: ${ASSIMP_LIBRARY}")
+    endif()
+  else()
     if(assimp_FIND_REQUIRED)
-      message(FATAL_ERROR "Could not find asset importer library")
-    endif(assimp_FIND_REQUIRED)
-  endif(assimp_FOUND)
-endif(WIN32)
+      message(FATAL_ERROR "Could not find Assimp library")
+    endif()
+  endif()
+endif()
+
+mark_as_advanced(ASSIMP_INCLUDE_DIR ASSIMP_LIBRARY ASSIMP_LIBRARIES)

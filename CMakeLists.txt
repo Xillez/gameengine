@@ -67,6 +67,16 @@ configure_file(
     @ONLY
 )
 
+# Determine platform and add custom cmake modules path if necessary.
+if(OS_NAME STREQUAL "LINUX")
+    # Custom cmake modules for linux environments.
+    list(APPEND CMAKE_MODULE_PATH "${PROJECT_PATH}")
+elseif(OS_NAME STREQUAL "WIN32")
+    #
+elseif(OS_NAME STREQUAL "MACOS") # TODO: Implement eventually.
+    #
+endif()
+
 # ---------------------------- Source file inclusion ---------------------------
 
 set(SOURCE_EXTENSIONS ".c" ".cpp") # Define a list of extensions of source files
@@ -111,10 +121,6 @@ include_directories(${HEADER_DIRS} ${IMGUI_INCLUDE_DIRS})
 
 # Give files for building application
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${IMGUI_SOURCE_FILES} ${SOURCE_DIR}/main.cpp)
-# Set the project to be a WIN32 executable
-if(OS_NAME STREQUAL "WIN32")
-    #set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
-endif()
 
 # Determine platform, find library includes and binary directories
 if(OS_NAME STREQUAL "LINUX")

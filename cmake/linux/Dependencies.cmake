@@ -49,8 +49,10 @@ if(fmt_FOUND)
     target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt-header-only)
 endif()
 
-find_package(SOIL CONFIG REQUIRED)
-# Use SOIL
+find_package(SOIL REQUIRED)
 if(SOIL_FOUND)
-    target_include_directories(${PROJECT_NAME} PRIVATE SOIL_INCLUDE_DIRS)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SOIL_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SOIL_LIBRARIES})
+else()
+    message(FATAL_ERROR "SOIL library not found.")
 endif()

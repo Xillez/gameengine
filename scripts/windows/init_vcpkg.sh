@@ -1,10 +1,10 @@
 #!/bin/bash
 
-./scripts/keep_vcpkg_json_updated.sh
+./scripts/windows/keep_vcpkg_json_updated.sh
 
-#source ./scripts/add_vcpkg_to_path.sh
+#source ./scripts/windows/add_vcpkg_to_path.sh
 
-source ./scripts/install_dependencies.sh
+source ./scripts/windows/install_dependencies.sh
 if [ $VCPKG_INSTALL_STATUS = false ]; then
     exit 1
 fi
