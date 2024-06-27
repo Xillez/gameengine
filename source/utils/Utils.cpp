@@ -3,8 +3,8 @@
 #include <chrono>
 #include <random>
 
-#include "uuid.hpp"
-#include <glm/gtc/constants.hpp>
+#include "_uuid.hpp"
+#include "_glm.hpp"
 
 #include "./Utils.hpp"
 

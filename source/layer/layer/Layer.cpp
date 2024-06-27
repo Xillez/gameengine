@@ -5,17 +5,17 @@ Layer::Layer(const std::string& name = "Layer")
     this->name = name;
 }
 
+void Layer::Update()
+{
+    //
+}
+
 void Layer::OnAttach()
 {
     //
 }
 
 void Layer::OnDetach()
-{
-    //
-}
-
-void Layer::OnUpdate()
 {
     //
 }

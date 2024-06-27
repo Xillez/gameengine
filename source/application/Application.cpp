@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include <GL/glew.h>
-#include <sdl.hpp>
+#include "_sdl.hpp"
 #include <AL/al.h>
 #include <AL/alc.h>
 #include "imgui.h"
