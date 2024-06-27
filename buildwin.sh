@@ -12,7 +12,7 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-source ./scripts/init.sh
+source ./scripts/project_vars.sh
 
 # Check for required environment variables
 if [ -z "$PROJECT_SETUP_COMPLETE" ]; then
