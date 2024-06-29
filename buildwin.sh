@@ -29,14 +29,12 @@ cd "$BASEDIR\build"
 
 printf "Running cmake:\n"
 export TARGET_ARCH=x64
-cmake .. -A $TARGET_ARCH -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+cmake .. -A $TARGET_ARCH -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE"
 
-CONFIGURATION="Debug"
+#CONFIGURATION="Debug"
 
 printf "Building program:\n"
 cmake --build . --config Debug
-
-
 
 if [ "$shouldRun" = true ]; then
     printf "Running application:\n"
