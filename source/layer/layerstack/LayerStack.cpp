@@ -17,7 +17,7 @@ void LayerStack::pushLayer(std::shared_ptr<Layer> layer)
 
 std::shared_ptr<Layer> LayerStack::popLayer()
 {
-    return this->popLayerAt(this->layers.size() - 1);
+    return this->popLayerAt(((int) this->layers.size()) - 1);
 }
 
 std::shared_ptr<Layer> LayerStack::peekLayer(int index)
@@ -44,7 +44,7 @@ void LayerStack::swapLayers(int index1, int index2)
     this->layers[index2] = temp;
 }
 
-int LayerStack::size() const
+size_t LayerStack::size() const
 {
     return this->layers.size();
 }

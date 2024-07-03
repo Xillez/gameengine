@@ -66,7 +66,7 @@ endif()
 find_package(spdlog CONFIG REQUIRED)
 # Use spdlog::spdlog_header_only
 if(spdlog_FOUND)
-    target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog_header_only)
+    target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
 endif()
 
 find_package(soil2 CONFIG REQUIRED)

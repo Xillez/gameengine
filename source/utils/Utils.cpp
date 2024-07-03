@@ -18,7 +18,7 @@ std::string generate_random_string()
     std::string result;
     result.reserve(32);
 
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = (unsigned) std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distribution(0, sizeof(alphanum) - 2);
 
@@ -153,7 +153,7 @@ void generateCone(float radius, float height, unsigned int sides, std::vector<gl
     generateCylinder(radius, height, sides, vertices);
 
     // Translate the cone part
-    for (unsigned int i = vertices.size() / 2; i < vertices.size(); ++i)
+    for (size_t i = vertices.size() / 2; i < vertices.size(); ++i)
     {
         vertices[i].y -= height / 2.0f;
     }
