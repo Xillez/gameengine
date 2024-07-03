@@ -5,7 +5,7 @@
 #include <string>
 #include <typeinfo>
 
-#include "fmt/format.h"
+#include "Logging.hpp"
 
 #include "Utils.hpp"
 
@@ -38,7 +38,7 @@ class Reflection
         bool valid = std::is_base_of<Tbase, Tclass>::value;
 
         if (!valid) // Class does NOT extend Component
-            LOG_ERROR(fmt::format("%s is not a subclass of %s", GetTypeName<Tclass>(), GetTypeName<Tbase>()));
+            Log::Error(fmt::format("%s is not a subclass of %s", GetTypeName<Tclass>(), GetTypeName<Tbase>()));
 
         return valid;
     }

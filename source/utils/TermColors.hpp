@@ -1,152 +1,36 @@
 #pragma once
 
+#include <string>
+
 class TermColor {
 public:
-    // Reset
+    enum class Color {
+        BLACK,
+        RED,
+        GREEN,
+        YELLOW,
+        BLUE,
+        MAGENTA,
+        CYAN,
+        WHITE,
+        GRAY,
+        LIGHT_GRAY
+    };
+
+    enum class Style {
+        REGULAR,
+        BOLD,
+        UNDERLINE,
+        BACKGROUND,
+        HIGH_INTENSITY,
+        BOLD_HIGH_INTENSITY,
+        BACKGROUND_HIGH_INTENSITY
+    };
+
+    static std::string color(Color color, Style style = Style::REGULAR);
+
     static const std::string RESET;
-
-    // Regular colors
-    static const std::string BLACK;
-    static const std::string RED;
-    static const std::string GREEN;
-    static const std::string YELLOW;
-    static const std::string BLUE;
-    static const std::string MAGENTA;
-    static const std::string CYAN;
-    static const std::string WHITE;
-
-    // Bold colors
-    static const std::string BOLD_BLACK;
-    static const std::string BOLD_RED;
-    static const std::string BOLD_GREEN;
-    static const std::string BOLD_YELLOW;
-    static const std::string BOLD_BLUE;
-    static const std::string BOLD_MAGENTA;
-    static const std::string BOLD_CYAN;
-    static const std::string BOLD_WHITE;
-
-    // Underline colors
-    static const std::string UNDERLINE_BLACK;
-    static const std::string UNDERLINE_RED;
-    static const std::string UNDERLINE_GREEN;
-    static const std::string UNDERLINE_YELLOW;
-    static const std::string UNDERLINE_BLUE;
-    static const std::string UNDERLINE_MAGENTA;
-    static const std::string UNDERLINE_CYAN;
-    static const std::string UNDERLINE_WHITE;
-
-    // Background colors
-    static const std::string BG_BLACK;
-    static const std::string BG_RED;
-    static const std::string BG_GREEN;
-    static const std::string BG_YELLOW;
-    static const std::string BG_BLUE;
-    static const std::string BG_MAGENTA;
-    static const std::string BG_CYAN;
-    static const std::string BG_WHITE;
-
-    // High intensity colors
-    static const std::string LIGHT_BLACK;
-    static const std::string LIGHT_RED;
-    static const std::string LIGHT_GREEN;
-    static const std::string LIGHT_YELLOW;
-    static const std::string LIGHT_BLUE;
-    static const std::string LIGHT_MAGENTA;
-    static const std::string LIGHT_CYAN;
-    static const std::string LIGHT_WHITE;
-
-    // Bold high intensity colors
-    static const std::string BOLD_LIGHT_BLACK;
-    static const std::string BOLD_LIGHT_RED;
-    static const std::string BOLD_LIGHT_GREEN;
-    static const std::string BOLD_LIGHT_YELLOW;
-    static const std::string BOLD_LIGHT_BLUE;
-    static const std::string BOLD_LIGHT_MAGENTA;
-    static const std::string BOLD_LIGHT_CYAN;
-    static const std::string BOLD_LIGHT_WHITE;
-
-    // High intensity background colors
-    static const std::string BG_LIGHT_BLACK;
-    static const std::string BG_LIGHT_RED;
-    static const std::string BG_LIGHT_GREEN;
-    static const std::string BG_LIGHT_YELLOW;
-    static const std::string BG_LIGHT_BLUE;
-    static const std::string BG_LIGHT_MAGENTA;
-    static const std::string BG_LIGHT_CYAN;
-    static const std::string BG_LIGHT_WHITE;
 };
-
-const std::string TermColor::RESET = "\033[0m";
-
-// Regular colors
-const std::string TermColor::BLACK = "\033[0;30m";
-const std::string TermColor::RED = "\033[0;31m";
-const std::string TermColor::GREEN = "\033[0;32m";
-const std::string TermColor::YELLOW = "\033[0;33m";
-const std::string TermColor::BLUE = "\033[0;34m";
-const std::string TermColor::MAGENTA = "\033[0;35m";
-const std::string TermColor::CYAN = "\033[0;36m";
-const std::string TermColor::WHITE = "\033[0;37m";
-
-// Bold colors
-const std::string TermColor::BOLD_BLACK = "\033[1;30m";
-const std::string TermColor::BOLD_RED = "\033[1;31m";
-const std::string TermColor::BOLD_GREEN = "\033[1;32m";
-const std::string TermColor::BOLD_YELLOW = "\033[1;33m";
-const std::string TermColor::BOLD_BLUE = "\033[1;34m";
-const std::string TermColor::BOLD_MAGENTA = "\033[1;35m";
-const std::string TermColor::BOLD_CYAN = "\033[1;36m";
-const std::string TermColor::BOLD_WHITE = "\033[1;37m";
-
-// Underline colors
-const std::string TermColor::UNDERLINE_BLACK = "\033[4;30m";
-const std::string TermColor::UNDERLINE_RED = "\033[4;31m";
-const std::string TermColor::UNDERLINE_GREEN = "\033[4;32m";
-const std::string TermColor::UNDERLINE_YELLOW = "\033[4;33m";
-const std::string TermColor::UNDERLINE_BLUE = "\033[4;34m";
-const std::string TermColor::UNDERLINE_MAGENTA = "\033[4;35m";
-const std::string TermColor::UNDERLINE_CYAN = "\033[4;36m";
-const std::string TermColor::UNDERLINE_WHITE = "\033[4;37m";
-
-// Background colors
-const std::string TermColor::BG_BLACK = "\033[40m";
-const std::string TermColor::BG_RED = "\033[41m";
-const std::string TermColor::BG_GREEN = "\033[42m";
-const std::string TermColor::BG_YELLOW = "\033[43m";
-const std::string TermColor::BG_BLUE = "\033[44m";
-const std::string TermColor::BG_MAGENTA = "\033[45m";
-const std::string TermColor::BG_CYAN = "\033[46m";
-const std::string TermColor::BG_WHITE = "\033[47m";
-
-// High intensity colors
-const std::string TermColor::LIGHT_BLACK = "\033[0;90m";
-const std::string TermColor::LIGHT_RED = "\033[0;91m";
-const std::string TermColor::LIGHT_GREEN = "\033[0;92m";
-const std::string TermColor::LIGHT_YELLOW = "\033[0;93m";
-const std::string TermColor::LIGHT_BLUE = "\033[0;94m";
-const std::string TermColor::LIGHT_MAGENTA = "\033[0;95m";
-const std::string TermColor::LIGHT_CYAN = "\033[0;96m";
-const std::string TermColor::LIGHT_WHITE = "\033[0;97m";
-
-// Bold high intensity colors
-const std::string TermColor::BOLD_LIGHT_BLACK = "\033[1;90m";
-const std::string TermColor::BOLD_LIGHT_RED = "\033[1;91m";
-const std::string TermColor::BOLD_LIGHT_GREEN = "\033[1;92m";
-const std::string TermColor::BOLD_LIGHT_YELLOW = "\033[1;93m";
-const std::string TermColor::BOLD_LIGHT_BLUE = "\033[1;94m";
-const std::string TermColor::BOLD_LIGHT_MAGENTA = "\033[1;95m";
-const std::string TermColor::BOLD_LIGHT_CYAN = "\033[1;96m";
-const std::string TermColor::BOLD_LIGHT_WHITE = "\033[1;97m";
-
-// High intensity background colors
-const std::string TermColor::BG_LIGHT_BLACK = "\033[0;100m";
-const std::string TermColor::BG_LIGHT_RED = "\033[0;101m";
-const std::string TermColor::BG_LIGHT_GREEN = "\033[0;102m";
-const std::string TermColor::BG_LIGHT_YELLOW = "\033[0;103m";
-const std::string TermColor::BG_LIGHT_BLUE = "\033[0;104m";
-const std::string TermColor::BG_LIGHT_MAGENTA = "\033[0;105m";
-const std::string TermColor::BG_LIGHT_CYAN = "\033[0;106m";
-const std::string TermColor::BG_LIGHT_WHITE = "\033[0;107m";
 
 /*
 NOTE: Disabled. Unsure if this is really wanted yet.

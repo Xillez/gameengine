@@ -4,14 +4,14 @@
 
 //#include "rx.hpp"
 
+#include "Logging.hpp"
 #include "EventBus.hpp"
 #include "Event.hpp"
-#include "Logging.hpp"
 
 // static
 bool EventBus::emit(Event event)
 {
-    LOG_INFO("Emitting event: " + event.type);
+    Log::Info("Emitting event: " + event.type);
     //EventBus::subject.get_subscriber().on_next(event);
     return true;
 }

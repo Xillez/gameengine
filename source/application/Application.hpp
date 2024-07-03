@@ -1,8 +1,12 @@
 #pragma once
+#include <memory>
 
 #include "_sdl.hpp"
 
 #include "LayerStack.hpp"
+#include "GUILayer.hpp"
+#include "Logging.hpp"
+
 
 class Application
 {
@@ -25,4 +29,6 @@ private:
     // Main application window and glContext
     SDL_Window* window;
     SDL_GLContext glContext;
+
+    std::shared_ptr<GUILayer> guiLayer;
 };

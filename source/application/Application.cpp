@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <memory>
 
 #include <GL/glew.h>
 #include <AL/al.h>
@@ -15,8 +16,7 @@
 #include "Entity.hpp"
 #include "Component.hpp"
 #include "Config.hpp"
-#include "Logging.hpp"
-//#include "Asset.hpp"
+#include "GUILayer.hpp"
 //#include "ModelAsset.hpp"
 
 Application::Application()
@@ -50,24 +50,24 @@ public:
 void LogBuildInfo()
 {
     #if defined(PROJECT_NAME)
-        LOG_INFO(PROJECT_NAME);
+        Log::Info(PROJECT_NAME);
     #endif
     #if defined(VERSION)
-        LOG_INFO(VERSION);
+        Log::Info(VERSION);
     #endif
     #if defined(VERSION_NAME)
-        LOG_INFO(VERSION_NAME);
+        Log::Info(VERSION_NAME);
     #endif
     #if defined(OS_NAME)
-        LOG_INFO(OS_NAME)
+        Log::Info(OS_NAME);
     #endif
     #if LOGGING
-        LOG_INFO("Logging enabled!")
+        Log::Info("Logging enabled!");
     #endif
     #if DEBUG
-        LOG_INFO("DEBUG BUILD!")
+        Log::Debug("DEBUG BUILD!");
     #else
-        LOG_INFO("RELEASE BUILD!")
+        Log::Info("RELEASE BUILD!");
     #endif
 }
 
@@ -77,8 +77,9 @@ int Application::init()
 
     // Failed to initialize SDL.
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-        std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-        return -1;
+        auto error = SDL_GetError();
+        Log::Error("Failed to initialize SDL: {}", error);
+        return 1;
     }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4); // Set major version (e.g., 3)
@@ -86,16 +87,16 @@ int Application::init()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); // Use core profile
 
     // Create a GLFW window
-    this->window = SDL_CreateWindow("SkyForge Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
+    this->window = SDL_CreateWindow("SkyForgeEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
     if (this->window == nullptr) {
-        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+        Log::Error("Failed to create window: {}", SDL_GetError());
         SDL_Quit();
         return 1;
     }
 
     this->glContext = SDL_GL_CreateContext(this->window);
     if (!this->glContext) {
-        std::cerr << "Could not create GL context. Error: " << SDL_GetError() << std::endl;
+        Log::Error("Could not create GL context. Error: {}", SDL_GetError());
         SDL_DestroyWindow(this->window);
         SDL_Quit();
         return 1;
@@ -104,25 +105,20 @@ int Application::init()
     // Initialize GLEW
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
-        std::cerr << "Failed to initialize GLEW" << std::endl;
+        Log::Error("Failed to initialize GLEW");
         SDL_GL_DeleteContext(this->glContext);
         SDL_DestroyWindow(this->window);
         SDL_Quit();
-        return -1;
+        return 1;
     }
 
-    // Initialize ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable | ImGuiConfigFlags_DockingEnable;
+    this->guiLayer = std::make_shared<GUILayer>(this->window, this->glContext);
+    this->layerStack.pushLayer(this->guiLayer);
 
-    // Setup ImGui style
-    ImGui::StyleColorsDark();
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplSDL2_InitForOpenGL(this->window, this->glContext);
-    ImGui_ImplOpenGL3_Init("#version 150"); // Replace 'glsl_version' with your OpenGL shader version, e.g., "#version 150"
+    for (auto layer : this->layerStack)
+    {
+        layer->Init();
+    }
 
     return 0;
 }
@@ -156,7 +152,7 @@ int Application::run()
         // Poll for and process events
         while (SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
-            // TODO: Handle other events like window close, keyboard, mouse, etc.
+            // TODO: Handle other events like keyboard, mouse, etc.
             switch (event.type) {
                 case SDL_QUIT:
                     quit = true;
@@ -213,9 +209,11 @@ int Application::run()
 
     // Clean up
     scene.Destroy();
-    SDL_GL_DeleteContext(this->glContext);
-    SDL_DestroyWindow(this->window);
-    SDL_Quit();
+
+    for (auto layer : this->layerStack)
+    {
+        layer->Destroy();
+    }
 
     return 0;
 }

@@ -5,7 +5,17 @@ Layer::Layer(const std::string& name = "Layer")
     this->name = name;
 }
 
+void Layer::Init()
+{
+    //
+}
+
 void Layer::Update()
+{
+    //
+}
+
+void Layer::Destroy()
 {
     //
 }

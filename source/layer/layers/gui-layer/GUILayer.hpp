@@ -1,15 +1,17 @@
 #pragma once
 #include <string>
 
-class GUILayer
+#include "Layer.hpp"
+
+class GUILayer : public Layer
 {
 public:
-    GUILayer(const std::string& name);
+    GUILayer(SDL_Window* window, SDL_GLContext& glContext);
     virtual ~GUILayer() = default;
 
-    virtual void Begin();
+    virtual void Init();
     virtual void Update();
-    virtual void End();
+    virtual void Destroy();
 
     virtual void OnAttach();
     virtual void OnDetach();
@@ -18,4 +20,8 @@ public:
     const std::string& GetName() const;
 protected:
     std::string name;
+
+    // Main application window and glContext
+    SDL_Window* window;
+    SDL_GLContext glContext;
 };
