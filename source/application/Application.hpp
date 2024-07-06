@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <memory>
 
 #include "_sdl.hpp"
@@ -7,6 +8,24 @@
 #include "GUILayer.hpp"
 #include "Logging.hpp"
 
+class Point
+{
+public:
+    Point(float x, float y) : x(x), y(y) {};
+
+    float x, y;
+};
+
+DEFINE_FORMATTER(Point, {
+    std::cout << "Formatting Point with presentation_: " << this->presentation_ << std::endl;
+    switch (this->presentation_) {
+        case 'e':
+            return fmt::format_to(ctx.out(), "Point: ({:e}, {:e})", value.x, value.y);
+        case 'f':
+        default:
+            return fmt::format_to(ctx.out(), "Point: ({:f}, {:f})", value.x, value.y);
+    }
+})
 
 class Application
 {

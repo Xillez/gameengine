@@ -75,6 +75,9 @@ int Application::init()
 {
     LogBuildInfo();
 
+    Point p(1.0f, 2.0f);
+    Log::Info("Point: {}", p);
+
     // Failed to initialize SDL.
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         auto error = SDL_GetError();

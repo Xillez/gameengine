@@ -55,3 +55,41 @@ protected:
     static std::shared_ptr<spdlog::logger> logger;
 };
 
+/**
+ * @brief MACRO to make a default formatter for custom types for fmt library.
+ *
+ * @example Define a formatter for a custom type Point:
+ * struct Point {
+ *     double x, y;
+ * };
+ *
+ * // Use the macro to define the formatter for Point
+ * DEFINE_FORMATTER(Point, {
+ *     switch (this->presentation_) {
+ *         case 'e': return fmt::format_to(ctx.out(), "({:e}, {:e})", value.x, value.y);
+ *         case 'f':
+ *         default: return fmt::format_to(ctx.out(), "({:f}, {:f})", value.x, value.y);
+ *     }
+ * })
+ */
+#define DEFINE_FORMATTER(T, format_code)                                    \
+    template <>                                                             \
+    struct fmt::formatter<T> {                                              \
+        char presentation_ = 'f';                                           \
+                                                                            \
+        constexpr auto parse(fmt::format_parse_context& ctx) {              \
+            auto it = ctx.begin(), end = ctx.end();                         \
+            if (it != end && (*it == 'f' || *it == 'e')) {                  \
+                presentation_ = *it++;                                      \
+            }                                                               \
+            if (it != end && *it != '}') {                                  \
+                throw fmt::format_error("invalid format");                  \
+            }                                                               \
+            return it;                                                      \
+        }                                                                   \
+                                                                            \
+        template <typename FormatContext>                                   \
+        auto format(const T& value, FormatContext& ctx) const {             \
+            format_code                                                     \
+        }                                                                   \
+    };
