@@ -16,7 +16,12 @@ class Reflection
     static std::string GetTypeName(const T& obj)
     {
         int status;
-        char* demangled_name = abi::__cxa_demangle(typeid(obj).name(), nullptr, nullptr, &status);
+        char* demangled_name = abi::__cxa_demangle(
+            typeid(obj).name(),
+            nullptr,
+            nullptr,
+            &status
+        );
         std::string type_name(demangled_name);
         std::free(demangled_name);
         return type_name;
@@ -26,7 +31,12 @@ class Reflection
     static std::string GetTypeName()
     {
         int status;
-        char* demangled_name = abi::__cxa_demangle(typeid(T).name(), nullptr, nullptr, &status);
+        char* demangled_name = abi::__cxa_demangle(
+            typeid(T).name(),
+            nullptr,
+            nullptr,
+            &status
+        );
         std::string type_name(demangled_name);
         std::free(demangled_name);
         return type_name;
@@ -38,7 +48,11 @@ class Reflection
         bool valid = std::is_base_of<Tbase, Tclass>::value;
 
         if (!valid) // Class does NOT extend Component
-            Log::Error(fmt::format("%s is not a subclass of %s", GetTypeName<Tclass>(), GetTypeName<Tbase>()));
+            Log::Error(
+                "{} is not a subclass of {}",
+                GetTypeName<Tclass>(),
+                GetTypeName<Tbase>()
+            );
 
         return valid;
     }

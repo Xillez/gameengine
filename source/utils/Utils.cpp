@@ -18,7 +18,8 @@ std::string generate_random_string()
     std::string result;
     result.reserve(32);
 
-    unsigned seed = (unsigned) std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = (unsigned) std::chrono::system_clock::now()
+        .time_since_epoch().count();
     std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distribution(0, sizeof(alphanum) - 2);
 
@@ -55,8 +56,12 @@ std::string get_uuid()
 }
 
 // Generate vertices for a sphere
-void generateSphere(float radius, unsigned int rings, unsigned int sectors, std::vector<glm::vec3>& vertices)
-{
+void generateSphere(
+    float radius,
+    unsigned int rings,
+    unsigned int sectors,
+    std::vector<glm::vec3>& vertices
+) {
     float const R = 1.0f / static_cast<float>(rings - 1);
     float const S = 1.0f / static_cast<float>(sectors - 1);
 
@@ -64,9 +69,13 @@ void generateSphere(float radius, unsigned int rings, unsigned int sectors, std:
     {
         for (unsigned int s = 0; s < sectors; ++s)
         {
-            float const y = sin(-glm::pi<float>() / 2.0f + glm::pi<float>() * r * R);
-            float const x = cos(2.0f * glm::pi<float>() * s * S) * sin(glm::pi<float>() * r * R);
-            float const z = sin(2.0f * glm::pi<float>() * s * S) * sin(glm::pi<float>() * r * R);
+            float const y = sin(
+                -glm::pi<float>() / 2.0f + glm::pi<float>() * r * R
+            );
+            float const x = cos(2.0f * glm::pi<float>() * s * S) *
+                sin(glm::pi<float>() * r * R);
+            float const z = sin(2.0f * glm::pi<float>() * s * S) *
+                sin(glm::pi<float>() * r * R);
 
             vertices.push_back(glm::vec3(x, y, z) * radius);
         }
@@ -74,8 +83,7 @@ void generateSphere(float radius, unsigned int rings, unsigned int sectors, std:
 }
 
 // Generate vertices for a cube
-void generateCube(float size, std::vector<glm::vec3>& vertices)
-{
+void generateCube(float size, std::vector<glm::vec3>& vertices) {
     size /= 2.0f;
 
     vertices = {
@@ -91,8 +99,12 @@ void generateCube(float size, std::vector<glm::vec3>& vertices)
 }
 
 // Generate vertices for a cylinder
-void generateCylinder(float radius, float height, unsigned int sides, std::vector<glm::vec3>& vertices)
-{
+void generateCylinder(
+    float radius,
+    float height,
+    unsigned int sides,
+    std::vector<glm::vec3>& vertices
+) {
     float angle = 2.0f * glm::pi<float>() / static_cast<float>(sides);
 
     for (unsigned int i = 0; i < sides; ++i)
@@ -106,8 +118,14 @@ void generateCylinder(float radius, float height, unsigned int sides, std::vecto
 }
 
 // Generate vertices for a capsule (combination of sphere and cylinder)
-void generateCapsule(float radius, float height, unsigned int rings, unsigned int sectors, unsigned int sides, std::vector<glm::vec3>& vertices)
-{
+void generateCapsule(
+    float radius,
+    float height,
+    unsigned int rings,
+    unsigned int sectors,
+    unsigned int sides,
+    std::vector<glm::vec3>& vertices
+) {
     generateSphere(radius, rings, sectors, vertices);
     generateCylinder(radius, height - (2 * radius), sides, vertices);
 
@@ -132,8 +150,12 @@ void generatePlane(float size, std::vector<glm::vec3>& vertices)
 }
 
 // Generate vertices for an n-sided pyramid
-void generatePyramid(float size, unsigned int sides, float height, std::vector<glm::vec3>& vertices)
-{
+void generatePyramid(
+    float size,
+    unsigned int sides,
+    float height,
+    std::vector<glm::vec3>& vertices
+) {
     float angle = 2.0f * glm::pi<float>() / static_cast<float>(sides);
 
     for (unsigned int i = 0; i < sides; ++i)
@@ -148,8 +170,12 @@ void generatePyramid(float size, unsigned int sides, float height, std::vector<g
 }
 
 // Generate vertices for a cone
-void generateCone(float radius, float height, unsigned int sides, std::vector<glm::vec3>& vertices)
-{
+void generateCone(
+    float radius,
+    float height,
+    unsigned int sides,
+    std::vector<glm::vec3>& vertices
+) {
     generateCylinder(radius, height, sides, vertices);
 
     // Translate the cone part
