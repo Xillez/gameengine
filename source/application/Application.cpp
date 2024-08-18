@@ -76,12 +76,12 @@ int Application::init()
     LogBuildInfo();
 
     Point p(1.0f, 2.0f);
-    Log::Info("Point: {}", p);
+    Log::Info(fmt::format("Point: {}", p));
 
     // Failed to initialize SDL.
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         auto error = SDL_GetError();
-        Log::Error("Failed to initialize SDL: {}", error);
+        Log::Error(fmt::format("Failed to initialize SDL: {}", error));
         return 1;
     }
 
@@ -92,14 +92,14 @@ int Application::init()
     // Create a GLFW window
     this->window = SDL_CreateWindow("SkyForgeEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
     if (this->window == nullptr) {
-        Log::Error("Failed to create window: {}", SDL_GetError());
+        Log::Error(fmt::format("Failed to create window: {}", SDL_GetError()));
         SDL_Quit();
         return 1;
     }
 
     this->glContext = SDL_GL_CreateContext(this->window);
     if (!this->glContext) {
-        Log::Error("Could not create GL context. Error: {}", SDL_GetError());
+        Log::Error(fmt::format("Could not create GL context. Error: {}", SDL_GetError()));
         SDL_DestroyWindow(this->window);
         SDL_Quit();
         return 1;

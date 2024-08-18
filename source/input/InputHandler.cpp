@@ -9,13 +9,13 @@
 // virtual
 void InputHandler::emit(InputEvent event)
 {
-    Log::Info("Emitting event: {}", event.type);
+    Log::Info(fmt::format("Emitting event: {}", event.type));
 }
 
 // virtual
 void InputHandler::broadcast(InputEvent event)
 {
-    Log::Info("Broadcasting event: {}", event.type);
+    Log::Info(fmt::format("Broadcasting event: {}", event.type));
 }
 
 // virtual

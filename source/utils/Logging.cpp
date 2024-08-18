@@ -30,7 +30,6 @@ void Log::Info(const std::string format)
 /*void Log::Info(const std::string format, ...)
 {
     #if (LOGGING)
-        Log::logger->info(format);
         va_list args;
         va_start(args, format);
         Log::logger->info(Log::formatMessage(Log::LOG_INFO, format, args));
@@ -62,7 +61,7 @@ void Log::Error(const std::string format)
         Log::logger->error(format);
     #endif
 }
-/*-void Log::Error(const std::string format, ...)
+/*void Log::Error(const std::string format, ...)
 {
     #if (LOGGING)
         va_list args;
@@ -103,7 +102,7 @@ std::shared_ptr<spdlog::logger> Log::makeLogger(const std::string& name)
 }
 
 //static
-std::string Log::formatMessage(
+/*std::string Log::formatMessage(
     const std::string& tag,
     const std::string& format,
     va_list args
@@ -142,4 +141,4 @@ std::string Log::formatMessage(
         formatted_message,
         TermColor::RESET
     );
-}
+}*/

@@ -80,7 +80,7 @@ protected:
  *     }
  * })
  */
-#define DEFINE_FORMATTER(T, format_code)                                    \
+/*#define DEFINE_FORMATTER(T, format_code)                                    \
     template <>                                                             \
     struct fmt::formatter<T> {                                              \
         char presentation_ = 'f';                                           \
@@ -101,3 +101,4 @@ protected:
             format_code                                                     \
         }                                                                   \
     };
+*/

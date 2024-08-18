@@ -16,7 +16,7 @@ public:
     float x, y;
 };
 
-DEFINE_FORMATTER(Point, {
+/*DEFINE_FORMATTER(Point, {
     std::cout << "Formatting Point with presentation_: " << this->presentation_ << std::endl;
     switch (this->presentation_) {
         case 'e':
@@ -25,7 +25,7 @@ DEFINE_FORMATTER(Point, {
         default:
             return fmt::format_to(ctx.out(), "Point: ({:f}, {:f})", value.x, value.y);
     }
-})
+})*/
 
 class Application
 {
