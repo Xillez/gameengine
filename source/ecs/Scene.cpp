@@ -23,7 +23,7 @@ void Scene::Start()
         queue.pop();
         if (!entity->HasStarted())
             entity->Start();
-        
+
         for (Entity*& child : entity->GetChildren())
             queue.push(child);
     }
@@ -40,7 +40,7 @@ void Scene::Update()
         Entity* entity = queue.front();
         queue.pop();
         entity->Update();
-        
+
         for (Entity*& child : entity->GetChildren())
             queue.push(child);
     }
