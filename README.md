@@ -75,7 +75,7 @@ Basic game engine. WIP.
     ./buildwin.sh -r
     ```
 
-    If VCPKG is in your path or available the build script will run it to
+    If VCPKG is in your path or available, the build script will run it to
     install and compile any dependencies, then Run CMake and build the project.
-    Eventually the Project should come up. If it doesn't look for any errors or
+    Eventually the Project should come up. If it doesn't, look for any errors or
     issues in the log and go through them.
